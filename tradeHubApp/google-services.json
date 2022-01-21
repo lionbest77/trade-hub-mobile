@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "362356516786",
+    "firebase_url": "https://buypro-55176-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "buypro-55176",
+    "storage_bucket": "buypro-55176.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:362356516786:android:b002d8097a0b8bc08d26ab",
+        "android_client_info": {
+          "package_name": "com.buypro"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "362356516786-nbh043joj60danlkbagc5mncih1jfenc.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.buypro",
+            "certificate_hash": "9a1be00878759c932d838920f887141b14e02b0a"
+          }
+        },
+        {
+          "client_id": "362356516786-5dbdk976gbh9nnqmpv1vklkl1ajk13bg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCT4a8-75a_wUu3IxMTfWNCJGJoBPJzctA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "362356516786-5dbdk976gbh9nnqmpv1vklkl1ajk13bg.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "362356516786-kceuvv95ocqsl7u4qaqpk8fs2lkoa18d.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.buypro"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

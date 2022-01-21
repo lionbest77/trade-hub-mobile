@@ -1,0 +1,68 @@
+{
+  "expo": {
+    "icon": "src/assets/icon-ios-1024@1x.png",
+    "orientation": "portrait",
+    "ios": {
+      "usesIcloudStorage": true,
+      "entitlements": {
+        "com.apple.developer.networking.wifi-info": "true"
+      },
+      "icon": "src/assets/icon-ios-1024@1x.png",
+      "bundleIdentifier": "com.buypro",
+      "buildNumber": "1.0.4",
+      "config": {
+        "googleSignIn": {
+          "reservedClientId": "com.googleusercontent.apps.362356516786-kceuvv95ocqsl7u4qaqpk8fs2lkoa18d"
+        }
+      }
+    },
+    "splash": {
+      "backgroundColor": "#fff"
+    },
+    "androidStatusBar": {
+      "barStyle": "dark-content",
+      "backgroundColor": "#828282"
+    },
+    "android": {
+      "icon": "src/assets/icon-ios-1024@1x.png",
+      "package": "com.buypro",
+      "useNextNotificationsApi": true,
+      "googleServicesFile": "./google-services.json",
+      "config": {
+        "googleSignIn": {
+          "apiKey": "AIzaSyCce2X1ADr4n4cByQ68le_ViSATO6R4Xeg",
+          "certificateHash": "9A1BE00878759C932D838920F887141B14E02B0A"
+        }
+      },
+      "versionCode": 4
+    },
+    "notification": {
+      "icon": "./src/assets/logo.png",
+      "iosDisplayInForeground": true
+    },
+    "name": "BuyPro",
+    "slug": "expo-template-bare",
+    "privacy": "public",
+    "sdkVersion": "40.0.0",
+    "version": "1.0.4",
+    "entryPoint": "node_modules/expo/AppEntry.js",
+    "platforms": [
+      "ios",
+      "android",
+      "web"
+    ],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "packagerOpts": {
+      "assetExts": [
+        "html",
+        "png",
+        "svg"
+      ]
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    }
+  }
+}
