@@ -7,6 +7,7 @@ import {
   ActivityIndicator,
   Alert,
 } from 'react-native';
+import {connect} from 'react-redux';
 
 import {Overlay} from 'react-native-elements';
 
@@ -27,6 +28,8 @@ import CheckMarkIcon from '../../../ui/icons/CheckMarkIcon';
 import COLORS from '../../../constants/Colors';
 import {styles} from './style.js';
 
+import { GET_ALL_CONTRACTORS, SET_CONTRACTORS } from '../../../store/reduxConstants';
+
 const TenderSupplierSelection = ({initActiveState = false, ...props}) => {
   const [index, setIndex] = useState(0);
   const [active, setActive] = useState(initActiveState);
@@ -45,98 +48,70 @@ const TenderSupplierSelection = ({initActiveState = false, ...props}) => {
   const {tender, token, role} = props; 
   // console.log('TENDER', tender);
 
+  // useEffect(() => {
+  //   if(contractors != null && contractors.length > 0) {
+  //     refactorContractorsArray(contractors);
+  //   }
+  // }, []);
+
   useEffect(() => {
     try {
       setIsLoading(true);
       axios
-      .get(`${DEFAULT_URL}/tenders/${id}/offers`,
-          {headers: { 'Authorization': `Bearer ${token}`}})
-      .then(res => {
-        //console.log('OFFERS:', res.data);
-        setContractors(res.data);
-      })
-      .catch(err => {
-        console.log(err);
-      });
+        .get(`${DEFAULT_URL}/tenders/${id}/offers`,
+            {headers: { 'Authorization': `Bearer ${token}`}})
+        .then(res => {
+          // console.log('OFFERS:', res.data);
+          setContractors(res.data);
+          refactorContractorsArray(res.data);
+        })
+        .catch(err => {
+          console.log(err);
+        });
       setIsLoading(false);
-
-      // console.log(contractors[0]);
-      console.log("-----");
-      // setRefactoredContractors({});
-      contractors.forEach((item) => {
-        console.log(item.tender_item.item.name);
-        console.log(`${item.tender_item.item.name}` in refactoredContractors);
-
-        // if ([item.tender_item.item.name] in refactoredContractors) {
-        //   console.log('Key exists');
-        //   // refactoredContractors[item.tender_item.item.name] = [...refactoredContractors[item.tender_item.item.name], item.tender_item.item.name];
-  
-        //   // const newArrayWithNewItem = refactoredContractors[item.tender_item.item.name];
-        //   // newArrayWithNewItem.push(item);
-  
-  
-        //   // const newObj = refactoredContractors;
-        //   // // console.log('----------newObj');
-        //   // // console.log(newObj);
-        //   // // console.log('///----------newObj');
-  
-        //   // newObj[item.tender_item.item.name] = newArrayWithNewItem;
-        //   // // console.log('----------newObj ref');
-        //   // console.log(newObj);
-        //   // // console.log('///----------newObj ref');
-        //   // setRefactoredContractors(() => newObj );
-        //   setRefactoredContractors(() => { test: "test" } );
-        // } else {
-        //   console.log('New key');
-        //   setRefactoredContractors((prev) => Object.assign(prev, { [item.tender_item.item.name]: [item] }) );
-        //   console.log("ID: " + prev._id);
-        // }
-      });
-      // console.log(refactoredContractors[0]);
-
-      // setRefactoredContractors((prev) => Object.assign(prev, { [contractors[0].tender_item.item.name]: [contractors[0]] }) );
-
-
-
-
-      if ([contractors[1].tender_item.item.name] in refactoredContractors) {
-        console.log('Key exists');
-        // refactoredContractors[contractors[1].tender_item.item.name] = [...refactoredContractors[contractors[1].tender_item.item.name], contractors[1].tender_item.item.name];
-
-        const newArrayWithNewItem = refactoredContractors[contractors[1].tender_item.item.name];
-        newArrayWithNewItem.push(contractors[1]);
-
-
-        const newObj = refactoredContractors;
-        // console.log('----------newObj');
-        // console.log(newObj);
-        // console.log('///----------newObj');
-
-        newObj[contractors[1].tender_item.item.name] = newArrayWithNewItem;
-        // console.log('----------newObj ref');
-        console.log(newObj);
-        // console.log('///----------newObj ref');
-        setRefactoredContractors(() => newObj );
-      } else {
-        console.log('New key');
-        setRefactoredContractors((prev) => Object.assign(prev, { [contractors[0].tender_item.item.name]: [contractors[0]] }) );
-      }
-
-
-
-
-      // refactoredContractors['key'] = "test";
-      // TODO: refactor contractors array!
-      // setRefactoredContractors((prev) => Object.assign(prev, { key: 'new' }) );
-
-      console.log(refactoredContractors);
-
     } catch (e) {
       Alert.alert("Tender Supplier", `${e}`, [
         { text: "OK" }
       ]);
     }
+
+    return () => {
+
+    };
   }, [isApprove, tender]);
+
+  const refactorContractorsArray = (data) => {
+    console.log("-----");
+    // console.log('OFFERS:', data);
+
+    if(!data) return;
+
+    let newObject = {};
+
+    data.map((item) => {
+      if (newObject.hasOwnProperty(`${item.tender_item.item.name}`)) {
+        console.log(`Key exists --- ${item.tender_item.item.name}`);
+        
+        const newArrayWithNewItem = newObject[`${item.tender_item.item.name}`];
+        // console.log(newArrayWithNewItem);
+        newArrayWithNewItem.push(item);
+
+        // const newArrayWithNewItem = [];
+        // newArrayWithNewItem.push(item);
+
+        newObject[item.tender_item.item.name] = newArrayWithNewItem;
+
+      } else {
+        console.log(`New key --- ${console.log(item.tender_item.item.name)}`);
+        newObject = Object.assign(newObject, { [item.tender_item.item.name]: [item] });
+      }
+
+    });
+
+    setRefactoredContractors(newObject);
+    props.setContractors(newObject);
+    // console.log(refactoredContractors);
+  }
 
   const addSupplier = async index => {
     setActiveOverlay(!activeOverlay);
@@ -226,6 +201,14 @@ const TenderSupplierSelection = ({initActiveState = false, ...props}) => {
                         marginHorizontal: 4,
                       }}
                   >
+                    {/* { console.log(props.getContractors()) }  */}
+                    { 
+                      // console.log(props.contractorsObject) 
+                      console.log('-----------------------'),
+                      console.log(props.contractorsObject),
+                      console.log('-----------------------'),
+                      Object.keys(props.contractorsObject).map((key) => console.log(props.contractorsObject[key].length))
+                    }
                     {isLoading ? (
                         <View>
                           <ActivityIndicator size="large" color={COLORS.main}/>
@@ -233,23 +216,33 @@ const TenderSupplierSelection = ({initActiveState = false, ...props}) => {
                     ) 
                     : (
                       
-                      
-                        contractors.length > 0 ? (
-                            contractors.map((item, index) => (
-                                <ContractorCard
-                                    key={`${index}`}
-                                    item={item}
-                                    index={index}
-                                    tendrId={props.tender._id}
-                                    setActiveOverlay={setActiveOverlay}
-                                    setActiveOverlayDel={setActiveOverlayDel}
-                                    activeOverlay={activeOverlay}
-                                    setIndex={setIndex}
-                                    role={role}
-                                />
-                            ))
-                          ) : (
-                              <View
+                        
+                      props.contractorsObject != null
+                      && !!Object.keys(props.contractorsObject).length 
+                        ? (
+                          Object.keys(props.contractorsObject).map((key) => {
+                            return (
+                              <ScrollView key={ key } horizontal={ true }>
+                                {
+                                  props.contractorsObject[key].map((item, index) => {
+                                    return <ContractorCard
+                                      key={`${index}`}
+                                      item={item}
+                                      index={index}
+                                      tendrId={props.tender._id}
+                                      setActiveOverlay={setActiveOverlay}
+                                      setActiveOverlayDel={setActiveOverlayDel}
+                                      activeOverlay={activeOverlay}
+                                      setIndex={setIndex}
+                                      role={role}
+                                    />
+                                  })
+                                }
+                              </ScrollView>
+                            );
+                          })
+                        )  : (
+                          <View
                                   style={{
                                     marginTop: '25%',
                                     paddingHorizontal: '5%',
@@ -260,7 +253,35 @@ const TenderSupplierSelection = ({initActiveState = false, ...props}) => {
                                   зворотній зв'язок від менеджера.
                                 </InformText>
                               </View>
-                          )
+                        )
+                      
+                        // contractors.length > 0 ? (
+                        //     contractors.map((item, index) => (
+                        //         <ContractorCard
+                        //             key={`${index}`}
+                        //             item={item}
+                        //             index={index}
+                        //             tendrId={props.tender._id}
+                        //             setActiveOverlay={setActiveOverlay}
+                        //             setActiveOverlayDel={setActiveOverlayDel}
+                        //             activeOverlay={activeOverlay}
+                        //             setIndex={setIndex}
+                        //             role={role}
+                        //         />
+                        //     ))
+                        //   ) : (
+                        //       <View
+                        //           style={{
+                        //             marginTop: '25%',
+                        //             paddingHorizontal: '5%',
+                        //           }}
+                        //       >
+                        //         <InformText>
+                        //           Дякуємо, що обрали постачальників. Чекайте на
+                        //           зворотній зв'язок від менеджера.
+                        //         </InformText>
+                        //       </View>
+                        //   )
                       )
                     }
                   </View>
@@ -335,4 +356,15 @@ const TenderSupplierSelection = ({initActiveState = false, ...props}) => {
   );
 };
 
-export default TenderSupplierSelection;
+const mapStateToProps = state => ({
+  contractorsObject: state.contractor.contractorsKeyValuePairs,
+});
+
+const mapDispatchToProps = dispatch => ({
+  getContractors: () => dispatch({ type: GET_ALL_CONTRACTORS }),
+  setContractors: payload => dispatch({ type: SET_CONTRACTORS, payload }),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(TenderSupplierSelection);
+
+// export default TenderSupplierSelection;

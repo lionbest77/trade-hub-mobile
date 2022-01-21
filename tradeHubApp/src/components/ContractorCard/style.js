@@ -15,7 +15,8 @@ export const styles = StyleSheet.create({
     marginHorizontal: 4,
     marginVertical: 20,
     backgroundColor: "#fff",
-    paddingBottom: 15
+    paddingBottom: 15,
+    width: width - 20,
   },
   topWrapper: {
     flexDirection: "row",
