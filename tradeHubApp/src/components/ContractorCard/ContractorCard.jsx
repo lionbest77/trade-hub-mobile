@@ -64,7 +64,7 @@ const ContractorCard = props => {
   return (<View style={styles.container}>
     <View style={styles.topWrapper}>
 
-      <View style={styles.topTextImageWrapper}>
+      {/* <View style={styles.topTextImageWrapper}>
         <View style={{ width: "85%" }}>
           <View style={styles.titleWrapper}>
             <Text style={styles.title}>
@@ -83,11 +83,60 @@ const ContractorCard = props => {
             </Text>
           </View>
         </View>
-
         <View style={{ width: "15%" }}>
-          <Image source={ deliveryCarImage } style={{ width: 40, height: 40 }} /> 
-        </View>
-      </View>
+              <Image source={ deliveryCarImage } style={{ width: 40, height: 40 }} /> 
+            </View>
+      </View> */}
+
+      {
+          !delivery
+          ? (
+            <View style={{ width: "85%" }}>
+              <View style={styles.titleWrapper}>
+                <Text style={styles.title}>
+                  {
+                    supplier?.fullName ?
+                      supplier?.fullName :
+                      name
+                  }
+                </Text>
+                <Text style={{
+                  ...styles.date,
+                  marginLeft: 35,
+                  marginBottom: 10,
+                }}>
+                  {fullData.day}.{fullData.month}.{fullData.year}
+                </Text>
+              </View>
+            </View>
+          )
+          : (
+            <View style={styles.topTextImageWrapper}>
+              <View style={{ width: "85%" }}>
+                <View style={styles.titleWrapper}>
+                  <Text style={styles.title}>
+                    {
+                      supplier?.fullName ?
+                        supplier?.fullName :
+                        name
+                    }
+                  </Text>
+                  <Text style={{
+                    ...styles.date,
+                    marginLeft: 35,
+                    marginBottom: 10,
+                  }}>
+                    {fullData.day}.{fullData.month}.{fullData.year}
+                  </Text>
+                </View>
+              </View>
+
+              <View style={{ width: "15%" }}>
+                <Image source={ deliveryCarImage } style={{ width: 40, height: 40 }} /> 
+              </View>
+            </View>
+          )
+        }
 
       {!delivery && (<View>
         {isApprove !== null ? (<View style={styles.approve}>
@@ -171,23 +220,31 @@ const ContractorCard = props => {
         {note}
       </Text>
 
-      <View style={styles.deliverySuccessWrapper}>
-        <View style={{ width: "40%" }}></View>
+      {
+        !delivery 
+        ? null
+        : (
+          <View style={styles.deliverySuccessWrapper}>
+            <View style={{ width: "40%" }}></View>
 
-        <View style={{ width: "50%" }}>
-        <MainButton
-            icon={<GreenCheckMarkIcon />}
-            backgroundColor={"#fff"}
-            rightBorderNone={true}
-            width={"100%"}
-            label={"Отримано"}
-            containerRight={true}
-            onPress={ () => {
-              // TODO: Add Implementation for delivery success (integrate with API)
-            } }
-          />
-        </View>
-      </View>
+            <View style={{ width: "50%" }}>
+            <MainButton
+                icon={<GreenCheckMarkIcon />}
+                backgroundColor={"#fff"}
+                rightBorderNone={true}
+                width={"100%"}
+                label={"Отримано"}
+                containerRight={true}
+                onPress={ () => {
+                  // TODO: Add Implementation for delivery success (integrate with API)
+                } }
+              />
+            </View>
+          </View>
+        )
+      }
+
+      
 
     </View>
   </View>);

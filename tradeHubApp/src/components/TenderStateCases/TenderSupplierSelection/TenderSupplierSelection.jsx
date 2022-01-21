@@ -36,12 +36,13 @@ const TenderSupplierSelection = ({initActiveState = false, ...props}) => {
   const [contractors, setContractors] = useState([]);
   const [activeOverlay, setActiveOverlay] = useState(false);
   const [activeOverlayDel, setActiveOverlayDel] = useState(false);
+  const [refactoredContractors, setRefactoredContractors] = useState({});
 
   const formRef = useRef(null);
 
   const id = props.tender._id;
 
-  const {tender, token, role} = props;
+  const {tender, token, role} = props; 
   // console.log('TENDER', tender);
 
   useEffect(() => {
@@ -51,13 +52,85 @@ const TenderSupplierSelection = ({initActiveState = false, ...props}) => {
       .get(`${DEFAULT_URL}/tenders/${id}/offers`,
           {headers: { 'Authorization': `Bearer ${token}`}})
       .then(res => {
-        console.log('OFFERS:', res.data);
+        //console.log('OFFERS:', res.data);
         setContractors(res.data);
       })
       .catch(err => {
         console.log(err);
       });
       setIsLoading(false);
+
+      // console.log(contractors[0]);
+      console.log("-----");
+      // setRefactoredContractors({});
+      contractors.forEach((item) => {
+        console.log(item.tender_item.item.name);
+        console.log(`${item.tender_item.item.name}` in refactoredContractors);
+
+        // if ([item.tender_item.item.name] in refactoredContractors) {
+        //   console.log('Key exists');
+        //   // refactoredContractors[item.tender_item.item.name] = [...refactoredContractors[item.tender_item.item.name], item.tender_item.item.name];
+  
+        //   // const newArrayWithNewItem = refactoredContractors[item.tender_item.item.name];
+        //   // newArrayWithNewItem.push(item);
+  
+  
+        //   // const newObj = refactoredContractors;
+        //   // // console.log('----------newObj');
+        //   // // console.log(newObj);
+        //   // // console.log('///----------newObj');
+  
+        //   // newObj[item.tender_item.item.name] = newArrayWithNewItem;
+        //   // // console.log('----------newObj ref');
+        //   // console.log(newObj);
+        //   // // console.log('///----------newObj ref');
+        //   // setRefactoredContractors(() => newObj );
+        //   setRefactoredContractors(() => { test: "test" } );
+        // } else {
+        //   console.log('New key');
+        //   setRefactoredContractors((prev) => Object.assign(prev, { [item.tender_item.item.name]: [item] }) );
+        //   console.log("ID: " + prev._id);
+        // }
+      });
+      // console.log(refactoredContractors[0]);
+
+      // setRefactoredContractors((prev) => Object.assign(prev, { [contractors[0].tender_item.item.name]: [contractors[0]] }) );
+
+
+
+
+      if ([contractors[1].tender_item.item.name] in refactoredContractors) {
+        console.log('Key exists');
+        // refactoredContractors[contractors[1].tender_item.item.name] = [...refactoredContractors[contractors[1].tender_item.item.name], contractors[1].tender_item.item.name];
+
+        const newArrayWithNewItem = refactoredContractors[contractors[1].tender_item.item.name];
+        newArrayWithNewItem.push(contractors[1]);
+
+
+        const newObj = refactoredContractors;
+        // console.log('----------newObj');
+        // console.log(newObj);
+        // console.log('///----------newObj');
+
+        newObj[contractors[1].tender_item.item.name] = newArrayWithNewItem;
+        // console.log('----------newObj ref');
+        console.log(newObj);
+        // console.log('///----------newObj ref');
+        setRefactoredContractors(() => newObj );
+      } else {
+        console.log('New key');
+        setRefactoredContractors((prev) => Object.assign(prev, { [contractors[0].tender_item.item.name]: [contractors[0]] }) );
+      }
+
+
+
+
+      // refactoredContractors['key'] = "test";
+      // TODO: refactor contractors array!
+      // setRefactoredContractors((prev) => Object.assign(prev, { key: 'new' }) );
+
+      console.log(refactoredContractors);
+
     } catch (e) {
       Alert.alert("Tender Supplier", `${e}`, [
         { text: "OK" }
@@ -140,7 +213,7 @@ const TenderSupplierSelection = ({initActiveState = false, ...props}) => {
                 <View
                     style={{
                       marginLeft: 30,
-                    }}
+                    }}а
                 >
                   <Tab label="Постачальники"/>
                 </View>
@@ -157,33 +230,39 @@ const TenderSupplierSelection = ({initActiveState = false, ...props}) => {
                         <View>
                           <ActivityIndicator size="large" color={COLORS.main}/>
                         </View>
-                    ) : contractors.length > 0 ? (
-                        contractors.map((item, index) => (
-                            <ContractorCard
-                                key={`${index}`}
-                                item={item}
-                                index={index}
-                                tendrId={props.tender._id}
-                                setActiveOverlay={setActiveOverlay}
-                                setActiveOverlayDel={setActiveOverlayDel}
-                                activeOverlay={activeOverlay}
-                                setIndex={setIndex}
-                                role={role}
-                            />
-                        ))
-                    ) : (
-                        <View
-                            style={{
-                              marginTop: '25%',
-                              paddingHorizontal: '5%',
-                            }}
-                        >
-                          <InformText>
-                            Дякуємо, що обрали постачальників. Чекайте на
-                            зворотній зв'язок від менеджера.
-                          </InformText>
-                        </View>
-                    )}
+                    ) 
+                    : (
+                      
+                      
+                        contractors.length > 0 ? (
+                            contractors.map((item, index) => (
+                                <ContractorCard
+                                    key={`${index}`}
+                                    item={item}
+                                    index={index}
+                                    tendrId={props.tender._id}
+                                    setActiveOverlay={setActiveOverlay}
+                                    setActiveOverlayDel={setActiveOverlayDel}
+                                    activeOverlay={activeOverlay}
+                                    setIndex={setIndex}
+                                    role={role}
+                                />
+                            ))
+                          ) : (
+                              <View
+                                  style={{
+                                    marginTop: '25%',
+                                    paddingHorizontal: '5%',
+                                  }}
+                              >
+                                <InformText>
+                                  Дякуємо, що обрали постачальників. Чекайте на
+                                  зворотній зв'язок від менеджера.
+                                </InformText>
+                              </View>
+                          )
+                      )
+                    }
                   </View>
                 </ScrollView>
               }

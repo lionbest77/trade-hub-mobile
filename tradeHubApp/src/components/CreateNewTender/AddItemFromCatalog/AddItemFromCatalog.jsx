@@ -279,7 +279,7 @@ const AddItemFromCatalog = ({
     // {name: "Item 3"},
     {name: "Гумка для банкнот, 50 г (Гумки для банкнот)"},
     {name: "Гумка для банкнот, 500 г (Гумки для банкнот)"},
-    {name: "Гумка для банкнот, 1000 г (Гумки для банкнот)"},
+    {name: "Гумка для банкнот, 1000 г (Гумки для банкнот) long text long text"},
   ];
 
   const ProductItemComponent = ({item}) => {
@@ -354,39 +354,40 @@ const AddItemFromCatalog = ({
             }
           </View>
         </ScrollView>
-        {!!selectedItem?.value &&
-        <>
-          <Text numberOfLines={4}>{itemFullObject?.description}</Text>
-          <View style={{width: '50%'}}>
-            <View>
-              <InputForm
-                  required={true}
-                  editable={true}
-                  security={false}
-                  label={`Кількість (${itemFullObject?.measureUnit})`}
-                  selectTextOnFocus={true}
-                  value={amount}
-                  onChangeText={changeAmount}
-                  keyboardType="numeric"
-                  warning={amountErr}
-              />
-            </View>
-            <View>
-              <InputForm
-                  required={true}
-                  editable={true}
-                  security={false}
-                  label={`Максимальна ціна`}
-                  selectTextOnFocus={true}
-                  value={maxPrice}
-                  onChangeText={changeMaxPrice}
-                  keyboardType="numeric"
-                  warning={maxPriceErr}
-              />
-            </View>
+        {
+          !!selectedItem?.value &&
+          <View>
+            <Text style={{ marginTop: "5%" }} numberOfLines={4}>{itemFullObject?.description}</Text>
+            <View style={{width: '50%'}}>
+              <View>
+                <InputForm
+                    required={true}
+                    editable={true}
+                    security={false}
+                    label={`Кількість (${itemFullObject?.measureUnit})`}
+                    selectTextOnFocus={true}
+                    value={amount}
+                    onChangeText={changeAmount}
+                    keyboardType="numeric"
+                    warning={amountErr}
+                />
+              </View>
+              <View>
+                <InputForm
+                    required={true}
+                    editable={true}
+                    security={false}
+                    label={`Максимальна ціна`}
+                    selectTextOnFocus={true}
+                    value={maxPrice}
+                    onChangeText={changeMaxPrice}
+                    keyboardType="numeric"
+                    warning={maxPriceErr}
+                />
+              </View>
 
+            </View>
           </View>
-        </>
         }
       </View>
     );
