@@ -86,30 +86,36 @@ const TenderSupplierSelection = ({initActiveState = false, ...props}) => {
 
     if(!data) return;
 
-    let newObject = {};
+    let refactoredContractorDictionary = {};
 
     data.map((item) => {
-      if (newObject.hasOwnProperty(`${item.tender_item.item.name}`)) {
-        console.log(`Key exists --- ${item.tender_item.item.name}`);
+      if (refactoredContractorDictionary.hasOwnProperty(`${item.tender_item.item.name}`)) {
+        //console.log(`Key exists --- ${item.tender_item.item.name}`);
         
-        const newArrayWithNewItem = newObject[`${item.tender_item.item.name}`];
+        const newArrayWithNewItem = refactoredContractorDictionary[`${item.tender_item.item.name}`];
         // console.log(newArrayWithNewItem);
         newArrayWithNewItem.push(item);
 
         // const newArrayWithNewItem = [];
         // newArrayWithNewItem.push(item);
 
-        newObject[item.tender_item.item.name] = newArrayWithNewItem;
+        refactoredContractorDictionary[item.tender_item.item.name] = newArrayWithNewItem;
 
       } else {
-        console.log(`New key --- ${console.log(item.tender_item.item.name)}`);
-        newObject = Object.assign(newObject, { [item.tender_item.item.name]: [item] });
+        //console.log(`New key --- ${console.log(item.tender_item.item.name)}`);
+        refactoredContractorDictionary = Object.assign(refactoredContractorDictionary, { [item.tender_item.item.name]: [item] });
       }
 
     });
 
-    setRefactoredContractors(newObject);
-    props.setContractors(newObject);
+    for (const [key, value] of Object.entries(refactoredContractorDictionary)) {
+      value.sort((a,b) => (a.supplierPrice > b.supplierPrice) ? 1 : ((b.supplierPrice > a.supplierPrice) ? -1 : 0))
+    }
+
+   
+
+    setRefactoredContractors(refactoredContractorDictionary);
+    props.setContractors(refactoredContractorDictionary);
     // console.log(refactoredContractors);
   }
 
@@ -204,10 +210,10 @@ const TenderSupplierSelection = ({initActiveState = false, ...props}) => {
                     {/* { console.log(props.getContractors()) }  */}
                     { 
                       // console.log(props.contractorsObject) 
-                      console.log('-----------------------'),
-                      console.log(props.contractorsObject),
-                      console.log('-----------------------'),
-                      Object.keys(props.contractorsObject).map((key) => console.log(props.contractorsObject[key].length))
+                      //console.log('-----------------------'),
+                      //console.log(props.contractorsObject),
+                      //console.log('-----------------------'),
+                      //Object.keys(props.contractorsObject).map((key) => console.log(props.contractorsObject[key].length))
                     }
                     {isLoading ? (
                         <View>
