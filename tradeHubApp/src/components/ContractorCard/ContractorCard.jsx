@@ -1,5 +1,5 @@
 import React from 'react';
-import { Image, View, Text, Alert } from 'react-native';
+import {View, Text, Alert} from 'react-native';
 
 import COLORS from '../../constants/Colors.js';
 import {styles} from './style.js';
@@ -7,10 +7,6 @@ import {styles} from './style.js';
 import CrossIcon from '../../ui/icons/CrossIcon';
 import MainButton from '../buttons/MainButton/MainButton';
 import CheckMarkIcon from '../../ui/icons/CheckMarkIcon';
-import GreenCheckMarkIcon from '../../ui/icons/GreenCheckMarkIcon';
-
-import deliveryCarImage from '../../assets/images/deliveryCar.png'; 
-// import BlackCheckMarkIcon from '../../assets/images/checkMark.png'; 
 
 const ContractorCard = props => {
   const {
@@ -63,81 +59,17 @@ const ContractorCard = props => {
   };
   return (<View style={styles.container}>
     <View style={styles.topWrapper}>
+      <View style={styles.titleWrapper}>
+        <Text style={styles.title}>{supplier?.fullName ?
+            supplier?.fullName :
+            name}</Text>
+        <Text style={{
+          ...styles.date,
+          marginLeft: 35,
+          marginBottom: 10,
+        }}>{fullData.day}.{fullData.month}.{fullData.year}</Text>
 
-      {/* <View style={styles.topTextImageWrapper}>
-        <View style={{ width: "85%" }}>
-          <View style={styles.titleWrapper}>
-            <Text style={styles.title}>
-              {
-                supplier?.fullName ?
-                  supplier?.fullName :
-                  name
-              }
-            </Text>
-            <Text style={{
-              ...styles.date,
-              marginLeft: 35,
-              marginBottom: 10,
-            }}>
-              {fullData.day}.{fullData.month}.{fullData.year}
-            </Text>
-          </View>
-        </View>
-        <View style={{ width: "15%" }}>
-              <Image source={ deliveryCarImage } style={{ width: 40, height: 40 }} /> 
-            </View>
-      </View> */}
-
-      {
-          !delivery
-          ? (
-            <View style={{ width: "85%" }}>
-              <View style={styles.titleWrapper}>
-                <Text style={styles.title}>
-                  {
-                    supplier?.fullName ?
-                      supplier?.fullName :
-                      name
-                  }
-                </Text>
-                <Text style={{
-                  ...styles.date,
-                  marginLeft: 35,
-                  marginBottom: 10,
-                }}>
-                  {fullData.day}.{fullData.month}.{fullData.year}
-                </Text>
-              </View>
-            </View>
-          )
-          : (
-            <View style={styles.topTextImageWrapper}>
-              <View style={{ width: "85%" }}>
-                <View style={styles.titleWrapper}>
-                  <Text style={styles.title}>
-                    {
-                      supplier?.fullName ?
-                        supplier?.fullName :
-                        name
-                    }
-                  </Text>
-                  <Text style={{
-                    ...styles.date,
-                    marginLeft: 35,
-                    marginBottom: 10,
-                  }}>
-                    {fullData.day}.{fullData.month}.{fullData.year}
-                  </Text>
-                </View>
-              </View>
-
-              <View style={{ width: "15%" }}>
-                <Image source={ deliveryCarImage } style={{ width: 40, height: 40 }} /> 
-              </View>
-            </View>
-          )
-        }
-
+      </View>
       {!delivery && (<View>
         {isApprove !== null ? (<View style={styles.approve}>
           <Text style={{
@@ -219,33 +151,6 @@ const ContractorCard = props => {
       <Text style={{...styles.val, width: '80%', marginBottom: 10}}>
         {note}
       </Text>
-
-      {
-        !delivery 
-        ? null
-        : (
-          <View style={styles.deliverySuccessWrapper}>
-            <View style={{ width: "40%" }}></View>
-
-            <View style={{ width: "50%" }}>
-            <MainButton
-                icon={<GreenCheckMarkIcon />}
-                backgroundColor={"#fff"}
-                rightBorderNone={true}
-                width={"100%"}
-                label={"Отримано"}
-                containerRight={true}
-                onPress={ () => {
-                  // TODO: Add Implementation for delivery success (integrate with API)
-                } }
-              />
-            </View>
-          </View>
-        )
-      }
-
-      
-
     </View>
   </View>);
 };
