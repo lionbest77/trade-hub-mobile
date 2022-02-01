@@ -11,5 +11,8 @@ web-build/
 
 # macOS
 .DS_Store
-should-be-private
-keystore.jks
+# Ignore Gradle project-specific cache directory
+.gradle
+
+# Ignore Gradle build output directory
+build
