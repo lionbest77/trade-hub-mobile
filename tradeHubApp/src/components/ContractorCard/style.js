@@ -20,12 +20,23 @@ export const styles = StyleSheet.create({
   },
   topWrapper: {
     flexDirection: "row",
-    justifyContent: "space-between",
+    // justifyContent: "space-between",
+    alignContent: 'center',
+    flex: 1,
+    justifyContent: "flex-end",
+    alignItems: "flex-end",
     marginTop: 19,
+    paddingRight: 10,
+    marginBottom: 5,
     width: '100%',
-
   },
-
+  secTopWrapper: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginTop: 10,
+    marginBottom: 5,
+    width: '100%',
+  },
   titleWrapper:{
     width: '70%',
   },
@@ -56,6 +67,12 @@ export const styles = StyleSheet.create({
     fontSize: width <=330 ? 11 : 14,
     fontWeight: 'bold',
     textTransform: 'uppercase'
+  },
+  productStatusText: {
+    fontSize: width <= 330 ? 11 : 14,
+    fontWeight: 'bold',
+    textTransform: 'uppercase',
+    textAlign: 'center',
   },
   topTextImageWrapper: {
     // marginBottom: 22,

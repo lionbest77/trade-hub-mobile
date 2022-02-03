@@ -10,6 +10,7 @@ import CheckMarkIcon from '../../ui/icons/CheckMarkIcon';
 import GreenCheckMarkIcon from '../../ui/icons/GreenCheckMarkIcon';
 
 import deliveryCarImage from '../../assets/images/deliveryCar.png'; 
+import { ProgressBarAndroidComponent } from 'react-native';
 // import BlackCheckMarkIcon from '../../assets/images/checkMark.png'; 
 
 const ContractorCard = props => {
@@ -42,6 +43,7 @@ const ContractorCard = props => {
   const setActiveOverlayDel = props.setActiveOverlayDel;
 
   const text = (isApprove && isApprove === true) ? `Підтверждено` : `Відхилено`;
+  const productStatusText = props.item.sent ? 'У дорозі' : 'Очікується';
   const textColor = (isApprove && isApprove === true) ?
       COLORS.good :
       COLORS.main;
@@ -61,8 +63,18 @@ const ContractorCard = props => {
   const alertShow = () => {
     Alert.alert('Недостатньо прав', 'на виконання даних дій', [{text: 'OK'}]);
   };
+
   return (<View style={styles.container}>
-    <View style={styles.topWrapper}>
+    {
+      <View style={styles.topWrapper}>
+        {delivery && <Text style={{
+                ...styles.productStatusText,
+                color: `${textColor}`,
+              }}>{productStatusText}</Text>}
+      </View>
+    }
+    
+    <View style={styles.secTopWrapper}>
 
       {/* <View style={styles.topTextImageWrapper}>
         <View style={{ width: "85%" }}>
@@ -131,9 +143,15 @@ const ContractorCard = props => {
                 </View>
               </View>
 
-              <View style={{ width: "15%" }}>
+              {
+                props.item.sent && <View style={{ width: "15%" }}>
                 <Image source={ deliveryCarImage } style={{ width: 40, height: 40 }} /> 
-              </View>
+                </View>
+              }
+
+              {/* <View style={{ width: "15%" }}>
+                <Image source={ deliveryCarImage } style={{ width: 40, height: 40 }} /> 
+              </View> */}
             </View>
           )
         }
@@ -149,10 +167,14 @@ const ContractorCard = props => {
             icon={<CrossIcon/>}
             rightBorderNone={true}
             backgroundColor={COLORS.main}
-            onPress={props.role ? () => {
-              setIndex(index);
-              setActiveOverlayDel(true);
-            } : alertShow}
+            onPress={
+              props.role 
+                ? () => {
+                  setIndex(index);
+                  setActiveOverlayDel(true);
+                } 
+                : alertShow
+            }
         />)}
 
       </View>)}
@@ -204,10 +226,14 @@ const ContractorCard = props => {
               rightBorderNone={true}
               backgroundColor={COLORS.good}
               icon={<CheckMarkIcon/>}
-              onPress={props.role ? () => {
-                setIndex(index);
-                setActiveOverlay(true);
-              } : alertShow}
+              onPress={
+                props.role 
+                ? () => {
+                  setIndex(index);
+                  setActiveOverlay(true);
+                } 
+                : alertShow
+              }
           />
         </View>)}
       </View>
@@ -221,6 +247,7 @@ const ContractorCard = props => {
       </Text>
 
       {
+        // TODO: ADD "DELIVERY ACCEPTED" BUTTON
         // !delivery 
         // ? null
         // : (

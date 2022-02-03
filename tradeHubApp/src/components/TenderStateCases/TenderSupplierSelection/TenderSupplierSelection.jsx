@@ -127,8 +127,10 @@ const TenderSupplierSelection = ({initActiveState = false, ...props}) => {
       method: 'PATCH',
       headers: {'Authorization': `Bearer ${token}`},
     };
-    await axios(authOptions).then(res => {
+    await axios(authOptions)
+    .then(res => {
           setIsApprove(!isApprove);
+          // TODO: clear all contrsctor from sec array in this product
         },
     ).catch(err => console.log(err));
     setIsLoading(false);
