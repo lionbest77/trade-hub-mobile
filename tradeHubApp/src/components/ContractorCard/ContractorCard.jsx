@@ -33,8 +33,10 @@ const ContractorCard = props => {
   const note = item?.tender_item?.note;
   const currency = ' грн.';
   const index = props.index;
+  const curId = props.curId;
   const delivery = props.delivery;
   const setIndex = props.setIndex;
+  const setCurId = props.setCurId;
   const description = tender_item?.item?.description;
   const measureUnit = item?.tender_item?.measureUnit;
   const isApprove = props.item.accepted;
@@ -67,10 +69,18 @@ const ContractorCard = props => {
   return (<View style={styles.container}>
     {
       <View style={styles.topWrapper}>
-        {delivery && <Text style={{
+        {
+          delivery && <Text style={{
                 ...styles.productStatusText,
                 color: `${textColor}`,
-              }}>{productStatusText}</Text>}
+              }}>{productStatusText}</Text>
+        }
+        {
+          isApprove !== null && <Text style={{
+            ...styles.approveText,
+            color: `${textColor}`,
+          }}>{text}</Text>
+        }
       </View>
     }
     
@@ -156,7 +166,30 @@ const ContractorCard = props => {
           )
         }
 
-      {!delivery && (<View>
+
+{/* {delivery ? null : ((isApprove === null) &&  */}
+
+
+
+      {
+         delivery ? null : ((isApprove === null) && (<MainButton
+              width={76}
+              icon={<CrossIcon/>}
+              rightBorderNone={true}
+              backgroundColor={COLORS.main}
+              onPress={
+                props.role 
+                  ? () => {
+                    setIndex(index);
+                    setActiveOverlayDel(true);
+                  } 
+                  : alertShow
+              }
+          />))
+      }
+
+
+      {/* {!delivery && (<View>
         {isApprove !== null ? (<View style={styles.approve}>
           <Text style={{
             ...styles.approveText,
@@ -177,7 +210,7 @@ const ContractorCard = props => {
             }
         />)}
 
-      </View>)}
+      </View>)} */}
     </View>
     <View style={{marginTop: 6}}>
       <Text style={styles.desc}>Найменування товару</Text>
@@ -230,6 +263,7 @@ const ContractorCard = props => {
                 props.role 
                 ? () => {
                   setIndex(index);
+                  setCurId(curId);
                   setActiveOverlay(true);
                 } 
                 : alertShow
