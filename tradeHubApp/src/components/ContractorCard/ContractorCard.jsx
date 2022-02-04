@@ -182,6 +182,7 @@ const ContractorCard = props => {
                 props.role 
                   ? () => {
                     setIndex(index);
+                    setCurId(curId);
                     setActiveOverlayDel(true);
                   } 
                   : alertShow

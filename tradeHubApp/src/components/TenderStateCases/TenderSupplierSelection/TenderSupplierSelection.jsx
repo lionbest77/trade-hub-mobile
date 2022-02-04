@@ -114,6 +114,10 @@ const TenderSupplierSelection = ({initActiveState = false, ...props}) => {
     });
 
     for (const [key, value] of Object.entries(refactoredContractorDictionary)) {
+      // TODO: check accepted supplier and clear array
+    }
+
+    for (const [key, value] of Object.entries(refactoredContractorDictionary)) {
       value.sort((a,b) => (a.supplierPrice > b.supplierPrice) ? 1 : ((b.supplierPrice > a.supplierPrice) ? -1 : 0))
     }
 
