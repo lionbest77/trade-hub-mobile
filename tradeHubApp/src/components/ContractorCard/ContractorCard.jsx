@@ -43,6 +43,7 @@ const ContractorCard = props => {
   const goodsName = tender_item?.item?.name ? tender_item.item.name : null;
   const setActiveOverlay = props.setActiveOverlay;
   const setActiveOverlayDel = props.setActiveOverlayDel;
+  const setActiveOverlayDeliveryAccept = props.setActiveOverlayDeliveryAccept;
 
   const text = (isApprove && isApprove === true) ? `Підтверждено` : `Відхилено`;
   const productStatusText = props.item.sent ? 'У дорозі' : 'Очікується';
@@ -76,7 +77,7 @@ const ContractorCard = props => {
               }}>{productStatusText}</Text>
         }
         {
-          isApprove !== null && <Text style={{
+          isApprove !== null && !delivery && <Text style={{
             ...styles.approveText,
             color: `${textColor}`,
           }}>{text}</Text>
@@ -282,27 +283,33 @@ const ContractorCard = props => {
 
       {
         // TODO: ADD "DELIVERY ACCEPTED" BUTTON
-        // !delivery 
-        // ? null
-        // : (
-        //   <View style={styles.deliverySuccessWrapper}>
-        //     <View style={{ width: "40%" }}></View>
+        delivery && props.item.sent
+        && (
+          <View style={styles.deliverySuccessWrapper}>
+            <View style={{ width: "40%" }}></View>
 
-        //     <View style={{ width: "50%" }}>
-        //     <MainButton
-        //         icon={<GreenCheckMarkIcon />}
-        //         backgroundColor={"#fff"}
-        //         rightBorderNone={true}
-        //         width={"100%"}
-        //         label={"Отримано"}
-        //         containerRight={true}
-        //         onPress={ () => {
-        //           // TODO: Add Implementation for delivery success (integrate with API)
-        //         } }
-        //       />
-        //     </View>
-        //   </View>
-        // )
+            <View style={{ width: "50%" }}>
+            <MainButton
+                icon={<GreenCheckMarkIcon />}
+                backgroundColor={"#fff"}
+                rightBorderNone={true}
+                width={"100%"}
+                label={"Отримано"}
+                containerRight={true}
+                onPress={
+                  // props.role 
+                  // ? 
+                  () => {
+                    setIndex(index);
+                    setCurId(curId);
+                    setActiveOverlayDeliveryAccept(true);
+                  } 
+                  // : alertShow
+                }
+              />
+            </View>
+          </View>
+        )
       }
 
       

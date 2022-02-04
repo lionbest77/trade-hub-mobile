@@ -39,6 +39,7 @@ const TenderSupplierSelection = ({initActiveState = false, ...props}) => {
   const [isLoading, setIsLoading] = useState(false);
   const [contractors, setContractors] = useState([]);
   const [activeOverlay, setActiveOverlay] = useState(false);
+  const [activeOverlayDelivveryAccept, setActiveOverlayDeliveryAccept] = useState(false);
   const [activeOverlayDel, setActiveOverlayDel] = useState(false);
   const [refactoredContractors, setRefactoredContractors] = useState({});
   const [indexIterator, setIndexIterator] = useState(0);
@@ -194,9 +195,29 @@ const TenderSupplierSelection = ({initActiveState = false, ...props}) => {
   //   setIsLoading(false);
   // };
 
+  const deliveryAccepted = async idd => {
+    // TODO: Add Implementation for delivery success (integrate with API)
+    setActiveOverlayDel(!activeOverlayDel);
+    // setIsLoading(true);
+    // const authOptions = {
+    //   method: 'PATCH',
+    //   headers: {'Authorization': `Bearer ${token}`},
+    //   url: `${DEFAULT_URL}/tenders/${tender._id}/refuseOffer/${idd}`,
+    // };
+
+    // await axios(authOptions).then(res => {
+    //       setIsApprove(!isApprove);
+    //     },
+    // )
+    //     // .then(res => props.statusSetter(res.status_code))
+    //     .catch(err => console.log(err));
+    // setIsLoading(false);
+  };
+
   const closeOverlay = () => {
     setActiveOverlay(false);
     setActiveOverlayDel(false);
+    setActiveOverlayDeliveryAccept(false);
   };
 
   const renderSuppliersList = () => {
@@ -215,8 +236,10 @@ const TenderSupplierSelection = ({initActiveState = false, ...props}) => {
                   curId={item._id}
                   tendrId={props.tender._id}
                   setActiveOverlay={setActiveOverlay}
+                  setActiveOverlayDeliveryAccept={setActiveOverlayDeliveryAccept}
                   setActiveOverlayDel={setActiveOverlayDel}
                   activeOverlay={activeOverlay}
+                  activeOverlayDelivveryAccept={activeOverlayDelivveryAccept}
                   setIndex={setIndex}
                   setCurId={setCurId}
                   role={role}
@@ -375,6 +398,36 @@ const TenderSupplierSelection = ({initActiveState = false, ...props}) => {
                   backgroundColor={'#27AE60'}
                   icon={<CheckMarkIcon/>}
                   onPress={() => addSupplier(curId)}
+                  // onPress={() => addSupplier(index)}
+              />
+            </View>
+          </View>
+        </Overlay>
+
+        <Overlay
+            isVisible={activeOverlayDelivveryAccept}
+            overlayStyle={styles.overlayContainer}
+            onBackdropPress={closeOverlay}
+        >
+          <Text style={styles.text}>
+            Ви впевнені, що хочете пiдтвердити отримання товару?
+          </Text>
+          <View style={styles.buttonsContainer}>
+            <View>
+              <MainButton
+                  width={80}
+                  leftBorderNone
+                  icon={<CrossIcon/>}
+                  onPress={() => closeOverlay()}
+              />
+            </View>
+            <View>
+              <MainButton
+                  width={80}
+                  rightBorderNone
+                  backgroundColor={'#27AE60'}
+                  icon={<CheckMarkIcon/>}
+                  onPress={() => deliveryAccepted(curId)}
                   // onPress={() => addSupplier(index)}
               />
             </View>

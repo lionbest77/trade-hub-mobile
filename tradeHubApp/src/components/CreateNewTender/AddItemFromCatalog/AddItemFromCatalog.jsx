@@ -1,13 +1,19 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import styles from '../style';
-import {ActivityIndicator, Text, View} from 'react-native';
+import { ActivityIndicator, Text, View, Dimensions, ScrollView, TextInput, TouchableOpacity } from 'react-native';
+import { ButtonGroup } from 'react-native-elements';
 import {Picker} from 'react-native-woodpicker';
+import { Formik } from "formik";
 import MainButton from '../../buttons/MainButton/MainButton';
 import {Overlay} from 'react-native-elements';
 import InputForm from '../../InputForm/InputForm/InputForm';
 import CheckMarkIcon from '../../../ui/icons/CheckMarkIcon';
 import CrossIcon from '../../../ui/icons/CrossIcon';
 import COLORS from '../../../constants/Colors';
+import InformText from '../../../ui//InformText/InformText';
+// import validationSchema from ".";
+
+import Tab from "../../Tab/Tab"; 
 
 const AddItemFromCatalog = ({
                               categories = [],
@@ -17,6 +23,8 @@ const AddItemFromCatalog = ({
                               getItem,
                               getCategory,
                               getItemList,
+                              screenNumber = 0,
+                              getScreenNumber,
                             }) => {
   const [items, setItems] = useState([]);
   const [selectedItem, setSelectedItem] = useState({});
@@ -29,6 +37,11 @@ const AddItemFromCatalog = ({
   const [amountErr, setAmountErr] = useState(false);
   const [maxPriceErr, setMaxPriceErr] = useState(false);
   const [loadPending, setLoadPending] = useState(false);
+  const [productScreenGroupNumber, setProductScreenGroupNumber] = useState(0);
+
+  const formRef = useRef(null);
+
+  let { width } = Dimensions.get("window");
 
   const loadItemsFromCategory = async (categoryId) => {
     await getItemList(categoryId).then(res => {
@@ -150,9 +163,239 @@ const AddItemFromCatalog = ({
     setSubCategory([...subcategoryArr]);
   };
 
+  const buttons = [
+    {
+      element: () => (
+        <Tab
+          buttonIndex={0}
+          label={"з каталогу"}
+          selectedIndex={ productScreenGroupNumber }
+        />
+      )
+    },
+    {
+      element: () => (
+        <Tab
+          buttonIndex={1}
+          label={"за назвою"}
+          selectedIndex={ productScreenGroupNumber }
+          alignmentRight
+        />
+      )
+    }
+  ];
+
+  const onButtonGroupClick = index => {
+    setProductScreenGroupNumber(index);
+  }
+
+  const ComponentSelectFromCatalog = () => {
+    return (
+      <View style={styles.overlayInputsContainer}>
+        <Picker
+            onItemChange={(data) => setCategory(data)}
+            items={categories}
+            title="Категорія товару"
+            item={category}
+            isNullable={true}
+            style={styles.pikerInput}
+            containerStyle={styles.containerStyle}
+            placeholderStyle={styles.placeholderStyle}
+            textInputStyle={styles.textInputStyle}
+            placeholder={'Категорія товару'}
+        />
+        {Array.isArray(subCategories) && !!subCategories?.length &&
+        subCategories.map((subCat, index) =>
+            <Picker
+                key={index}
+                onItemChange={(data) => handleSetSubcategory(data, index)}
+                items={subCat}
+                title="Виберіть підкатегорію"
+                item={subCategory[index]}
+                isNullable={true}
+                style={styles.pikerInput}
+                containerStyle={styles.containerStyle}
+                placeholderStyle={styles.placeholderStyle}
+                textInputStyle={styles.textInputStyle}
+                placeholder={'Виберіть підкатегорію'}
+            />)
+        }
+        {Array.isArray(items) && !!items.length &&
+        <Picker
+            onItemChange={selectItem}
+            items={items}
+            title="Товар"
+            item={selectedItem}
+            isNullable={true}
+            style={styles.pikerInput}
+            containerStyle={styles.containerStyle}
+            placeholderStyle={styles.placeholderStyle}
+            textInputStyle={styles.textInputStyle}
+            placeholder={'Виберіть товар'}
+            multiline={true}
+            numberOfLines={2}
+        />}
+        {!!selectedItem?.value &&
+        <>
+          <Text numberOfLines={4}>{itemFullObject?.description}</Text>
+          <View style={{width: '50%'}}>
+            <View>
+              <InputForm
+                  required={true}
+                  editable={true}
+                  security={false}
+                  label={`Кількість (${itemFullObject?.measureUnit})`}
+                  selectTextOnFocus={true}
+                  value={amount}
+                  onChangeText={changeAmount}
+                  keyboardType="numeric"
+                  warning={amountErr}
+              />
+            </View>
+            <View>
+              <InputForm
+                  required={true}
+                  editable={true}
+                  security={false}
+                  label={`Максимальна ціна`}
+                  selectTextOnFocus={true}
+                  value={maxPrice}
+                  onChangeText={changeMaxPrice}
+                  keyboardType="numeric"
+                  warning={maxPriceErr}
+              />
+            </View>
+
+          </View>
+        </>
+        }
+      </View>
+    );
+  }
+
+  const tempArray = [
+    // {name: "LONG LONG LONG LONG LONG LONG LONG LONG LONG LONG LONG Item Name"}, 
+    // {name: "Item 2"}, 
+    // {name: "Item 3"},
+    {name: "Гумка для банкнот, 50 г (Гумки для банкнот)"},
+    {name: "Гумка для банкнот, 500 г (Гумки для банкнот)"},
+    {name: "Гумка для банкнот, 1000 г (Гумки для банкнот) long text long text"},
+  ];
+
+  const ProductItemComponent = ({item}) => {
+    return (
+      <TouchableOpacity>
+        <View style={ styles.productItemContainer }> 
+          <Text style={ styles.productItemText }>{ item.name }</Text>
+        </View>
+      </TouchableOpacity>
+      
+    );
+  }
+
+  const ComponentSelectBySearchProductName = () => {
+    return (
+      <View style={ styles.selectBySearchContainer }>
+        <Formik
+          initialValues={{
+              product_name: "",
+          }}
+          // validationSchema={ validationSchema }
+          onSubmit={(values, { setSubmitting }) => {
+              setSubmitting(true);
+              alert(JSON.stringify(values));
+              setTimeout(() => {
+                setSubmitting(false);
+              }, 500);
+          }}
+          >
+            {
+              ({
+                values,
+                handleChange,
+                handleBlur,
+                isSubmitting,
+                errors
+              }) => (
+                <View style={ styles.selectBySearchContainerForm }>
+                  <Text style={ styles.productSearchInputLabel }>Введіть назву для пошуку товару</Text>
+                  <TextInput
+                    style={ styles.productSearchInput }
+                    name="product_name"
+                    onBlur={ handleBlur("product_name") }
+                    onChangeText={ handleChange("product_name") }
+                    
+                  />
+                </View>
+              )
+            }
+        </Formik>
+        <ScrollView style={{ width: "100%" }}>
+          <View>
+            {
+              tempArray.length > 0 
+                ? (
+                  tempArray.map((item, index) => (
+                    <ProductItemComponent key={`${index}`} item={ item }/>
+                  ))
+                ) 
+                : (
+                    <View 
+                        style={{
+                          marginTop: '25%',
+                          paddingHorizontal: '5%',
+                        }}
+                    >
+                      <InformText>
+                        Нажаль, такого товару не знайдено
+                      </InformText>
+                    </View>
+                )
+            }
+          </View>
+        </ScrollView>
+        {
+          !!selectedItem?.value &&
+          <View>
+            <Text style={{ marginTop: "5%" }} numberOfLines={4}>{itemFullObject?.description}</Text>
+            <View style={{width: '50%'}}>
+              <View>
+                <InputForm
+                    required={true}
+                    editable={true}
+                    security={false}
+                    label={`Кількість (${itemFullObject?.measureUnit})`}
+                    selectTextOnFocus={true}
+                    value={amount}
+                    onChangeText={changeAmount}
+                    keyboardType="numeric"
+                    warning={amountErr}
+                />
+              </View>
+              <View>
+                <InputForm
+                    required={true}
+                    editable={true}
+                    security={false}
+                    label={`Максимальна ціна`}
+                    selectTextOnFocus={true}
+                    value={maxPrice}
+                    onChangeText={changeMaxPrice}
+                    keyboardType="numeric"
+                    warning={maxPriceErr}
+                />
+              </View>
+
+            </View>
+          </View>
+        }
+      </View>
+    );
+  }
+
   return (
       <Overlay isVisible={showForm}
-               overlayStyle={[styles.overlayContainer, {height: 600}]}
+               overlayStyle={[styles.overlayContainer, {height: 650}]}
                onBackdropPress={closeForm}
       >
         <View style={{flex: 1}}>
@@ -165,84 +408,38 @@ const AddItemFromCatalog = ({
             <ActivityIndicator size="large" color={COLORS.main}/>
           </View>}
 
-          <Text
-              style={[styles.textOverlay, {lineHeight: 16, marginBottom: 10}]}>Виберіть
-            товар з
-            каталогу</Text>
-          <View style={styles.overlayInputsContainer}>
-            <Picker
-                onItemChange={(data) => setCategory(data)}
-                items={categories}
-                title="Категорія товару"
-                item={category}
-                isNullable={true}
-                style={styles.pikerInput}
-                containerStyle={styles.containerStyle}
-                placeholderStyle={styles.placeholderStyle}
-                placeholder={'Категорія товару'}
-            />
-            {Array.isArray(subCategories) && !!subCategories?.length &&
-            subCategories.map((subCat, index) =>
-                <Picker
-                    key={index}
-                    onItemChange={(data) => handleSetSubcategory(data, index)}
-                    items={subCat}
-                    title="Виберіть підкатегорію"
-                    item={subCategory[index]}
-                    isNullable={true}
-                    style={styles.pikerInput}
-                    containerStyle={styles.containerStyle}
-                    placeholderStyle={styles.placeholderStyle}
-                    placeholder={'Виберіть підкатегорію'}
-                />)
-            }
-            {Array.isArray(items) && !!items.length &&
-            <Picker
-                onItemChange={selectItem}
-                items={items}
-                title="Товар"
-                item={selectedItem}
-                isNullable={true}
-                style={styles.pikerInput}
-                containerStyle={styles.containerStyle}
-                placeholderStyle={styles.placeholderStyle}
-                placeholder={'Виберіть товар'}
-            />}
-            {!!selectedItem?.value &&
-            <>
-              <Text numberOfLines={4}>{itemFullObject?.description}</Text>
-              <View style={{width: '50%'}}>
-                <View>
-                  <InputForm
-                      required={true}
-                      editable={true}
-                      security={false}
-                      label={`Кількість (${itemFullObject?.measureUnit})`}
-                      selectTextOnFocus={true}
-                      value={amount}
-                      onChangeText={changeAmount}
-                      keyboardType="numeric"
-                      warning={amountErr}
-                  />
-                </View>
-                <View>
-                  <InputForm
-                      required={true}
-                      editable={true}
-                      security={false}
-                      label={`Максимальна ціна`}
-                      selectTextOnFocus={true}
-                      value={maxPrice}
-                      onChangeText={changeMaxPrice}
-                      keyboardType="numeric"
-                      warning={maxPriceErr}
-                  />
-                </View>
+          <Text style={[styles.textOverlay, {lineHeight: 16, marginBottom: 10}]}>
+            Виберіть товар
+          </Text>
 
-              </View>
-            </>
-            }
+          <View style={{ paddingHorizontal: width >= 600 ? 45 : 25 }}>
+            <ButtonGroup
+              buttons = { buttons }
+              onPress = { index => onButtonGroupClick(index) }
+              selectedIndex = { productScreenGroupNumber }
+              containerStyle = { styles.tabsContainer }
+              selectedButtonStyle = { styles.buttonsGroupContainer }
+              innerBorderStyle = {{ color: "#fff" }}
+            />
           </View>
+
+
+
+          <ScrollView ref={formRef}>
+            <View style={{ flex: 1, paddingTop: 30, paddingBottom: 25 }}>
+              {(() => {
+                switch (productScreenGroupNumber) {
+                  case 0:
+                    return <ComponentSelectFromCatalog />;
+                  case 1:
+                    return <ComponentSelectBySearchProductName />;
+                  default:
+                    return null;
+                }
+              })()}
+            </View>
+          </ScrollView>
+
 
           <View style={styles.buttonsContainer}>
             <View>
