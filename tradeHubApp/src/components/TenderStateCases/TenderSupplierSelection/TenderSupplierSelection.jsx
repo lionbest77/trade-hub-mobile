@@ -114,7 +114,14 @@ const TenderSupplierSelection = ({initActiveState = false, ...props}) => {
     });
 
     for (const [key, value] of Object.entries(refactoredContractorDictionary)) {
-      // TODO: check accepted supplier and clear array
+      if(Array.isArray(value)) {
+        value.map((item) => {
+          if(item.accepted) {
+            console.log("Found accepted supplier! Clearing array...");
+            refactoredContractorDictionary[key] = [item];
+          }
+        });
+      }
     }
 
     for (const [key, value] of Object.entries(refactoredContractorDictionary)) {
