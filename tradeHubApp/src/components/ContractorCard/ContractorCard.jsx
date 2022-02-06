@@ -284,33 +284,33 @@ const ContractorCard = props => {
 
       {
         // TODO: ADD "DELIVERY ACCEPTED" BUTTON
-        delivery && props.item.sent
-        && (
-          <View style={styles.deliverySuccessWrapper}>
-            <View style={{ width: "40%" }}></View>
+        // delivery && props.item.sent
+        // && (
+        //   <View style={styles.deliverySuccessWrapper}>
+        //     <View style={{ width: "40%" }}></View>
 
-            <View style={{ width: "50%" }}>
-            <MainButton
-                icon={<GreenCheckMarkIcon />}
-                backgroundColor={"#fff"}
-                rightBorderNone={true}
-                width={"100%"}
-                label={"Отримано"}
-                containerRight={true}
-                onPress={
-                  // props.role 
-                  // ? 
-                  () => {
-                    setIndex(index);
-                    setCurId(curId);
-                    setActiveOverlayDeliveryAccept(true);
-                  } 
-                  // : alertShow
-                }
-              />
-            </View>
-          </View>
-        )
+        //     <View style={{ width: "50%" }}>
+        //     <MainButton
+        //         icon={<GreenCheckMarkIcon />}
+        //         backgroundColor={"#fff"}
+        //         rightBorderNone={true}
+        //         width={"100%"}
+        //         label={"Отримано"}
+        //         containerRight={true} 
+        //         onPress={
+        //           // props.role ы
+        //           // ? 
+        //           () => {
+        //             //setIndex(index);
+        //             //setCurId(curId);
+        //             //setActiveOverlayDeliveryAccept(true);
+        //           } 
+        //           // : alertShow
+        //         }
+        //       />
+        //     </View>
+        //   </View>
+        // )
       }
 
       
