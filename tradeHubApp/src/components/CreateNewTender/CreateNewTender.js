@@ -237,6 +237,10 @@ const CreateNewTender = ({
       };
 
       const addItem = itemData => {
+        console.log('========= Add item =======');
+        console.log('------ items --------');
+        console.log(items);
+        console.log('------ /items --------');
         setItems([...items, itemData]);
       };
 

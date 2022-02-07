@@ -154,27 +154,13 @@ const AddItemFromCatalog = ({
       // console.log(res);
       res.map(
         (async (item, index) => {
-          // ! skiping large array
-          // if(item._id === "3ec93544-ef49-44d5-b518-b2f8c95b7171") {
-          //   return;
-          // }
-        // const allItemsFromCategory = await getItemsFromCategory(catId) || [];
-          // console.log(item.name + ' | ' + item._id);
           return await getItemsFromCategory(item._id)
             .then((data) => {
               const categoryItems = data || [];
-              //console.log("first promise"); 
-  
               return categoryItems.map((category) => ({ label: category.name, value: category._id }));
             })
             .then((refactoredCatItems) => {
-  
-              //console.log(`Refatored data length: ${refactoredCatItems.length}`);
-              // commonProductList = commonProductList.concat(refactoredCatItems)
               setProductsList((prev) => prev.concat(refactoredCatItems));
-              // setProductsList(refactoredCatItems);
-              //console.log(`----- ProductsList length: ${productsList.length} ------`);
-              
             });
         })
       )
@@ -300,9 +286,7 @@ const AddItemFromCatalog = ({
   }, [subCategory]);
 
   useEffect(() => {
-    // console.log(`selected item: ${selectedItem?.value}`);
     if (selectedItem?.value) {
-      console.log("HAS VALUE (ID)");
       getItem(selectedItem?.value).then(res => {
         setItemFullObject(res);
       }).catch(err => console.warn('Error get item', err));
@@ -359,15 +343,13 @@ const AddItemFromCatalog = ({
       let itemData = {
         name: itemFullObject.name,
         item: {_id: itemFullObject._id},
-        category: {_id: category.value},
+        category: {_id: itemFullObject.category._id},
         amount: Number(amount),
         maxPrice: Math.ceil(Number(maxPrice)),
         measureUnit: itemFullObject.measureUnit,
       };
       addItem(itemData);
       closeForm();
-    } else {
-      console.log("Handle add ELSE");
     }
   };
 
@@ -452,10 +434,11 @@ const AddItemFromCatalog = ({
         />}
         {!!selectedItem?.value &&
         <>
+          {/* <Text style={{ marginBottom: '2%' }}>Товар до заказу</Text> */}
           <Text style={{ fontWeight: 'bold', marginBottom: '5%' }} numberOfLines={4}>{itemFullObject?.name}</Text>
           <View style={{width: '50%'}}>
             <View>
-              <InputForm
+              <ModifiedInputForm
                   required={true}
                   editable={true}
                   security={false}
@@ -468,7 +451,7 @@ const AddItemFromCatalog = ({
               />
             </View>
             <View>
-              <InputForm
+              <ModifiedInputForm
                   required={true}
                   editable={true}
                   security={false}
@@ -490,7 +473,10 @@ const AddItemFromCatalog = ({
 
   const ProductItemComponent = ({item}) => {
     return (
-      <TouchableOpacity onPress={ () => { selectItem(item) } }>
+      <TouchableOpacity onPress={ () => { 
+          selectItem(item);
+          formRef.current.scrollToEnd({ animated: true });
+        } }>
         <View style={ styles.productItemContainer }> 
           <Text style={ styles.productItemText }>{ item.label }</Text>
         </View>
@@ -515,8 +501,8 @@ const AddItemFromCatalog = ({
               warning={false}
           />
         </View>
-        <ScrollView style={{ width: "100%" }}>
-          <View>
+        <ScrollView style={{ width: "100%" }} nestedScrollEnabled = {true}>
+          <View style={{ height: "30%" }}>
             {
               similarProductList.length > 0 
                 ? (
@@ -542,11 +528,15 @@ const AddItemFromCatalog = ({
         { // Папір
           !!selectedItem?.value &&
           <View>
-            
-            <Text style={{ marginTop: "10%", fontWeight: 'bold', marginBottom: '5%' }} numberOfLines={4}>{itemFullObject?.name}</Text>
+            {/* <Text style={{ marginBottom: '2%' }}>Товар до заказу</Text> */}
+            <Text style={{ 
+              marginTop: "10%", 
+              fontWeight: 'bold', 
+              marginBottom: '5%' 
+            }} numberOfLines={4}>{ itemFullObject?.name }</Text>
             <View style={{width: '50%'}}>
               <View>
-                <InputForm
+                <ModifiedInputForm
                     required={true}
                     editable={true}
                     security={false}
@@ -559,7 +549,7 @@ const AddItemFromCatalog = ({
                 />
               </View>
               <View>
-                <InputForm
+                <ModifiedInputForm
                     required={true}
                     editable={true}
                     security={false}
@@ -610,7 +600,7 @@ const AddItemFromCatalog = ({
             />
           </View>
 
-          <ScrollView ref={formRef}>
+          <ScrollView ref={formRef} nestedScrollEnabled = {true}>
             <View style={{ flex: 1, paddingTop: 30, paddingBottom: 25 }}>
               {(() => {
                 switch (productScreenGroupNumber) {
