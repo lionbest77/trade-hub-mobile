@@ -32,14 +32,17 @@ import { GET_ALL_CONTRACTORS, SET_CONTRACTORS } from '../../../store/reduxConsta
 
 const TenderSupplierSelection = ({initActiveState = false, ...props}) => {
   const [index, setIndex] = useState(0);
+  const [curId, setCurId] = useState(0);
   const [active, setActive] = useState(initActiveState);
   const [expanded, setExpanded] = useState(initActiveState);
   const [isApprove, setIsApprove] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [contractors, setContractors] = useState([]);
   const [activeOverlay, setActiveOverlay] = useState(false);
+  const [activeOverlayDelivveryAccept, setActiveOverlayDeliveryAccept] = useState(false);
   const [activeOverlayDel, setActiveOverlayDel] = useState(false);
   const [refactoredContractors, setRefactoredContractors] = useState({});
+  const [indexIterator, setIndexIterator] = useState(0);
 
   const formRef = useRef(null);
 
@@ -64,6 +67,7 @@ const TenderSupplierSelection = ({initActiveState = false, ...props}) => {
           // console.log('OFFERS:', res.data);
           setContractors(res.data);
           refactorContractorsArray(res.data);
+          console.log("refreshing contractors effect...");
         })
         .catch(err => {
           console.log(err);
@@ -86,55 +90,93 @@ const TenderSupplierSelection = ({initActiveState = false, ...props}) => {
 
     if(!data) return;
 
-    let newObject = {};
+    let refactoredContractorDictionary = {};
+          // TODO: clear all contrsctor from array if list contains approved product
 
     data.map((item) => {
-      if (newObject.hasOwnProperty(`${item.tender_item.item.name}`)) {
-        console.log(`Key exists --- ${item.tender_item.item.name}`);
+      if (refactoredContractorDictionary.hasOwnProperty(`${item.tender_item.item.name}`)) {
+        //console.log(`Key exists --- ${item.tender_item.item.name}`);
         
-        const newArrayWithNewItem = newObject[`${item.tender_item.item.name}`];
+        const newArrayWithNewItem = refactoredContractorDictionary[`${item.tender_item.item.name}`];
         // console.log(newArrayWithNewItem);
         newArrayWithNewItem.push(item);
 
         // const newArrayWithNewItem = [];
         // newArrayWithNewItem.push(item);
 
-        newObject[item.tender_item.item.name] = newArrayWithNewItem;
+        refactoredContractorDictionary[item.tender_item.item.name] = newArrayWithNewItem;
 
       } else {
-        console.log(`New key --- ${console.log(item.tender_item.item.name)}`);
-        newObject = Object.assign(newObject, { [item.tender_item.item.name]: [item] });
+        //console.log(`New key --- ${console.log(item.tender_item.item.name)}`);
+        refactoredContractorDictionary = Object.assign(refactoredContractorDictionary, { [item.tender_item.item.name]: [item] });
       }
 
     });
 
-    setRefactoredContractors(newObject);
-    props.setContractors(newObject);
+    for (const [key, value] of Object.entries(refactoredContractorDictionary)) {
+      if(Array.isArray(value)) {
+        value.map((item) => {
+          if(item.accepted) {
+            console.log("Found accepted supplier! Clearing array...");
+            refactoredContractorDictionary[key] = [item];
+          }
+        });
+      }
+    }
+
+    for (const [key, value] of Object.entries(refactoredContractorDictionary)) {
+      value.sort((a,b) => (a.supplierPrice > b.supplierPrice) ? 1 : ((b.supplierPrice > a.supplierPrice) ? -1 : 0))
+    }
+
+   
+
+    setRefactoredContractors(refactoredContractorDictionary);
+    props.setContractors(refactoredContractorDictionary);
     // console.log(refactoredContractors);
   }
 
-  const addSupplier = async index => {
+  // const addSupplier = async index => {
+  //   setActiveOverlay(!activeOverlay);
+  //   setIsLoading(true);
+  //   const authOptions = {
+  //     url: `${DEFAULT_URL}/tenders/${tender._id}/acceptOffer/${contractors[index]._id}`,
+  //     method: 'PATCH',
+  //     headers: {'Authorization': `Bearer ${token}`},
+  //   };
+  //   await axios(authOptions)
+  //   .then(res => {
+  //         setIsApprove(!isApprove);
+  //         // TODO: clear all contrsctor from sec array in this product
+
+  //       },
+  //   ).catch(err => console.log(err));
+  //   setIsLoading(false);
+  // };
+
+  const addSupplier = async idd => {
+    // console.log(idd);
     setActiveOverlay(!activeOverlay);
     setIsLoading(true);
     const authOptions = {
-      url: `${DEFAULT_URL}/tenders/${tender._id}/acceptOffer/${contractors[index]._id}`,
+      url: `${DEFAULT_URL}/tenders/${tender._id}/acceptOffer/${idd}`,
       method: 'PATCH',
       headers: {'Authorization': `Bearer ${token}`},
     };
-    await axios(authOptions).then(res => {
+    await axios(authOptions)
+    .then(res => {
           setIsApprove(!isApprove);
         },
     ).catch(err => console.log(err));
     setIsLoading(false);
   };
 
-  const deleteSupplier = async index => {
+  const deleteSupplier = async idd => {
     setActiveOverlayDel(!activeOverlayDel);
     setIsLoading(true);
     const authOptions = {
       method: 'PATCH',
       headers: {'Authorization': `Bearer ${token}`},
-      url: `${DEFAULT_URL}/tenders/${tender._id}/refuseOffer/${contractors[index]._id}`,
+      url: `${DEFAULT_URL}/tenders/${tender._id}/refuseOffer/${idd}`,
     };
 
     await axios(authOptions).then(res => {
@@ -146,10 +188,80 @@ const TenderSupplierSelection = ({initActiveState = false, ...props}) => {
     setIsLoading(false);
   };
 
+  // const deleteSupplier = async index => {
+  //   setActiveOverlayDel(!activeOverlayDel);
+  //   setIsLoading(true);
+  //   const authOptions = {
+  //     method: 'PATCH',
+  //     headers: {'Authorization': `Bearer ${token}`},
+  //     url: `${DEFAULT_URL}/tenders/${tender._id}/refuseOffer/${contractors[index]._id}`,
+  //   };
+
+  //   await axios(authOptions).then(res => {
+  //         setIsApprove(!isApprove);
+  //       },
+  //   )
+  //       // .then(res => props.statusSetter(res.status_code))
+  //       .catch(err => console.log(err));
+  //   setIsLoading(false);
+  // };
+
+  const deliveryAccepted = async idd => {
+    // TODO: Add Implementation for delivery success (integrate with API)
+    setActiveOverlayDel(!activeOverlayDel);
+    // setIsLoading(true);
+    // const authOptions = {
+    //   method: 'PATCH',
+    //   headers: {'Authorization': `Bearer ${token}`},
+    //   url: `${DEFAULT_URL}/tenders/${tender._id}/refuseOffer/${idd}`,
+    // };
+
+    // await axios(authOptions).then(res => {
+    //       setIsApprove(!isApprove);
+    //     },
+    // )
+    //     // .then(res => props.statusSetter(res.status_code))
+    //     .catch(err => console.log(err));
+    // setIsLoading(false);
+  };
+
   const closeOverlay = () => {
     setActiveOverlay(false);
     setActiveOverlayDel(false);
+    setActiveOverlayDeliveryAccept(false);
   };
+
+  const renderSuppliersList = () => {
+      let iterator = 0;
+      return Object.keys(props.contractorsObject).map((key) => {
+        return (
+          <ScrollView key={ key } horizontal={ true }>
+            {
+              props.contractorsObject[key].map((item, index) => {
+                // setIndexIterator((prev) => prev + 1);
+                iterator++;
+                return <ContractorCard
+                  key={`${iterator-1}`}
+                  item={item}
+                  index={iterator-1}
+                  curId={item._id}
+                  tendrId={props.tender._id}
+                  setActiveOverlay={setActiveOverlay}
+                  setActiveOverlayDeliveryAccept={setActiveOverlayDeliveryAccept}
+                  setActiveOverlayDel={setActiveOverlayDel}
+                  activeOverlay={activeOverlay}
+                  activeOverlayDelivveryAccept={activeOverlayDelivveryAccept}
+                  setIndex={setIndex}
+                  setCurId={setCurId}
+                  role={role}
+                />
+              })
+            }
+          </ScrollView>
+        );
+      })
+    
+  }
 
   return (
       <View style={styles.container}>
@@ -204,10 +316,10 @@ const TenderSupplierSelection = ({initActiveState = false, ...props}) => {
                     {/* { console.log(props.getContractors()) }  */}
                     { 
                       // console.log(props.contractorsObject) 
-                      console.log('-----------------------'),
-                      console.log(props.contractorsObject),
-                      console.log('-----------------------'),
-                      Object.keys(props.contractorsObject).map((key) => console.log(props.contractorsObject[key].length))
+                      //console.log('-----------------------'),
+                      //console.log(props.contractorsObject),
+                      //console.log('-----------------------'),
+                      //Object.keys(props.contractorsObject).map((key) => console.log(props.contractorsObject[key].length))
                     }
                     {isLoading ? (
                         <View>
@@ -220,27 +332,7 @@ const TenderSupplierSelection = ({initActiveState = false, ...props}) => {
                       props.contractorsObject != null
                       && !!Object.keys(props.contractorsObject).length 
                         ? (
-                          Object.keys(props.contractorsObject).map((key) => {
-                            return (
-                              <ScrollView key={ key } horizontal={ true }>
-                                {
-                                  props.contractorsObject[key].map((item, index) => {
-                                    return <ContractorCard
-                                      key={`${index}`}
-                                      item={item}
-                                      index={index}
-                                      tendrId={props.tender._id}
-                                      setActiveOverlay={setActiveOverlay}
-                                      setActiveOverlayDel={setActiveOverlayDel}
-                                      activeOverlay={activeOverlay}
-                                      setIndex={setIndex}
-                                      role={role}
-                                    />
-                                  })
-                                }
-                              </ScrollView>
-                            );
-                          })
+                          renderSuppliersList()
                         )  : (
                           <View
                                   style={{
@@ -316,7 +408,38 @@ const TenderSupplierSelection = ({initActiveState = false, ...props}) => {
                   rightBorderNone
                   backgroundColor={'#27AE60'}
                   icon={<CheckMarkIcon/>}
-                  onPress={() => addSupplier(index)}
+                  onPress={() => addSupplier(curId)}
+                  // onPress={() => addSupplier(index)}
+              />
+            </View>
+          </View>
+        </Overlay>
+
+        <Overlay
+            isVisible={activeOverlayDelivveryAccept}
+            overlayStyle={styles.overlayContainer}
+            onBackdropPress={closeOverlay}
+        >
+          <Text style={styles.text}>
+            Ви впевнені, що хочете пiдтвердити отримання товару?
+          </Text>
+          <View style={styles.buttonsContainer}>
+            <View>
+              <MainButton
+                  width={80}
+                  leftBorderNone
+                  icon={<CrossIcon/>}
+                  onPress={() => closeOverlay()}
+              />
+            </View>
+            <View>
+              <MainButton
+                  width={80}
+                  rightBorderNone
+                  backgroundColor={'#27AE60'}
+                  icon={<CheckMarkIcon/>}
+                  onPress={() => deliveryAccepted(curId)}
+                  // onPress={() => addSupplier(index)}
               />
             </View>
           </View>
@@ -347,7 +470,8 @@ const TenderSupplierSelection = ({initActiveState = false, ...props}) => {
                   rightBorderNone
                   backgroundColor={'#27AE60'}
                   icon={<CheckMarkIcon/>}
-                  onPress={() => deleteSupplier(index)}
+                  onPress={() => deleteSupplier(curId)}
+                  // onPress={() => deleteSupplier(index)}
               />
             </View>
           </View>

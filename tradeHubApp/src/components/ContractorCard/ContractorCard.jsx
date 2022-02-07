@@ -10,6 +10,7 @@ import CheckMarkIcon from '../../ui/icons/CheckMarkIcon';
 import GreenCheckMarkIcon from '../../ui/icons/GreenCheckMarkIcon';
 
 import deliveryCarImage from '../../assets/images/deliveryCar.png'; 
+import { ProgressBarAndroidComponent } from 'react-native';
 // import BlackCheckMarkIcon from '../../assets/images/checkMark.png'; 
 
 const ContractorCard = props => {
@@ -32,16 +33,20 @@ const ContractorCard = props => {
   const note = item?.tender_item?.note;
   const currency = ' грн.';
   const index = props.index;
+  const curId = props.curId;
   const delivery = props.delivery;
   const setIndex = props.setIndex;
+  const setCurId = props.setCurId;
   const description = tender_item?.item?.description;
   const measureUnit = item?.tender_item?.measureUnit;
   const isApprove = props.item.accepted;
   const goodsName = tender_item?.item?.name ? tender_item.item.name : null;
   const setActiveOverlay = props.setActiveOverlay;
   const setActiveOverlayDel = props.setActiveOverlayDel;
+  const setActiveOverlayDeliveryAccept = props.setActiveOverlayDeliveryAccept;
 
   const text = (isApprove && isApprove === true) ? `Підтверждено` : `Відхилено`;
+  const productStatusText = props.item.sent ? 'У дорозі' : 'Очікується';
   const textColor = (isApprove && isApprove === true) ?
       COLORS.good :
       COLORS.main;
@@ -61,8 +66,26 @@ const ContractorCard = props => {
   const alertShow = () => {
     Alert.alert('Недостатньо прав', 'на виконання даних дій', [{text: 'OK'}]);
   };
+
   return (<View style={styles.container}>
-    <View style={styles.topWrapper}>
+    {
+      <View style={styles.topWrapper}>
+        {
+          delivery && <Text style={{
+                ...styles.productStatusText,
+                color: `${textColor}`,
+              }}>{productStatusText}</Text>
+        }
+        {
+          isApprove !== null && !delivery && <Text style={{
+            ...styles.approveText,
+            color: `${textColor}`,
+          }}>{text}</Text>
+        }
+      </View>
+    }
+    
+    <View style={styles.secTopWrapper}>
 
       {/* <View style={styles.topTextImageWrapper}>
         <View style={{ width: "85%" }}>
@@ -131,14 +154,44 @@ const ContractorCard = props => {
                 </View>
               </View>
 
-              <View style={{ width: "15%" }}>
+              {
+                props.item.sent && <View style={{ width: "15%" }}>
                 <Image source={ deliveryCarImage } style={{ width: 40, height: 40 }} /> 
-              </View>
+                </View>
+              }
+
+              {/* <View style={{ width: "15%" }}>
+                <Image source={ deliveryCarImage } style={{ width: 40, height: 40 }} /> 
+              </View> */}
             </View>
           )
         }
 
-      {!delivery && (<View>
+
+{/* {delivery ? null : ((isApprove === null) &&  */}
+
+
+
+      {
+         delivery ? null : ((isApprove === null) && (<MainButton
+              width={76}
+              icon={<CrossIcon/>}
+              rightBorderNone={true}
+              backgroundColor={COLORS.main}
+              onPress={
+                props.role 
+                  ? () => {
+                    setIndex(index);
+                    setCurId(curId);
+                    setActiveOverlayDel(true);
+                  } 
+                  : alertShow
+              }
+          />))
+      }
+
+
+      {/* {!delivery && (<View>
         {isApprove !== null ? (<View style={styles.approve}>
           <Text style={{
             ...styles.approveText,
@@ -149,13 +202,17 @@ const ContractorCard = props => {
             icon={<CrossIcon/>}
             rightBorderNone={true}
             backgroundColor={COLORS.main}
-            onPress={props.role ? () => {
-              setIndex(index);
-              setActiveOverlayDel(true);
-            } : alertShow}
+            onPress={
+              props.role 
+                ? () => {
+                  setIndex(index);
+                  setActiveOverlayDel(true);
+                } 
+                : alertShow
+            }
         />)}
 
-      </View>)}
+      </View>)} */}
     </View>
     <View style={{marginTop: 6}}>
       <Text style={styles.desc}>Найменування товару</Text>
@@ -204,10 +261,15 @@ const ContractorCard = props => {
               rightBorderNone={true}
               backgroundColor={COLORS.good}
               icon={<CheckMarkIcon/>}
-              onPress={props.role ? () => {
-                setIndex(index);
-                setActiveOverlay(true);
-              } : alertShow}
+              onPress={
+                props.role 
+                ? () => {
+                  setIndex(index);
+                  setCurId(curId);
+                  setActiveOverlay(true);
+                } 
+                : alertShow
+              }
           />
         </View>)}
       </View>
@@ -221,27 +283,34 @@ const ContractorCard = props => {
       </Text>
 
       {
-        !delivery 
-        ? null
-        : (
-          <View style={styles.deliverySuccessWrapper}>
-            <View style={{ width: "40%" }}></View>
+        // TODO: ADD "DELIVERY ACCEPTED" BUTTON
+        // delivery && props.item.sent
+        // && (
+        //   <View style={styles.deliverySuccessWrapper}>
+        //     <View style={{ width: "40%" }}></View>
 
-            <View style={{ width: "50%" }}>
-            <MainButton
-                icon={<GreenCheckMarkIcon />}
-                backgroundColor={"#fff"}
-                rightBorderNone={true}
-                width={"100%"}
-                label={"Отримано"}
-                containerRight={true}
-                onPress={ () => {
-                  // TODO: Add Implementation for delivery success (integrate with API)
-                } }
-              />
-            </View>
-          </View>
-        )
+        //     <View style={{ width: "50%" }}>
+        //     <MainButton
+        //         icon={<GreenCheckMarkIcon />}
+        //         backgroundColor={"#fff"}
+        //         rightBorderNone={true}
+        //         width={"100%"}
+        //         label={"Отримано"}
+        //         containerRight={true} 
+        //         onPress={
+        //           // props.role ы
+        //           // ? 
+        //           () => {
+        //             //setIndex(index);
+        //             //setCurId(curId);
+        //             //setActiveOverlayDeliveryAccept(true);
+        //           } 
+        //           // : alertShow
+        //         }
+        //       />
+        //     </View>
+        //   </View>
+        // )
       }
 
       

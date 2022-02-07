@@ -43,33 +43,33 @@ import DeleteItemIcon from '../../ui/icons/DeleteItemIcon';
 import {dateTimeToString} from '../../services/formatService';
 
 const CreateNewTender = ({
-                           uri,
-                           sound,
-                           tender,
-                           setUri,
-                           setPage,
-                           setSound,
-                           userData,
-                           setTender,
-                           freeSpace,
-                           audioData,
-                           recording,
-                           navigation,
-                           setFreeSpace,
-                           setRecording,
-                           recordStatus,
-                           setIsChanged,
-                           setAudioData,
-                           audioDuration,
-                           setRecordStatus,
-                           arrayOfDocument,
-                           clearTenderData,
-                           setAudioDuration,
-                           checkStatusAudio,
-                           setArrayOfDocument,
-                           setCheckStatusAudio,
+    uri,
+    sound,
+    tender,
+    setUri,
+    setPage,
+    setSound,
+    userData,
+    setTender,
+    freeSpace,
+    audioData,
+    recording,
+    navigation,
+    setFreeSpace,
+    setRecording,
+    recordStatus,
+    setIsChanged,
+    setAudioData,
+    audioDuration,
+    setRecordStatus,
+    arrayOfDocument,
+    clearTenderData,
+    setAudioDuration,
+    checkStatusAudio,
+    setArrayOfDocument,
+    setCheckStatusAudio,
 
-                         }) => {
+  }) => {
 
       const [isLoading, setIsLoading] = useState(false);
       const [arrayLength, setArrayLength] = useState(null);
@@ -212,6 +212,7 @@ const CreateNewTender = ({
         ).then(res => res.json(), err => {
           console.log('Error get categories,', err);
         }).then(res => {
+          // console.log(res);
           setCategories(res.map(item => ({label: item.name, value: item._id})));
           // console.log('CATEGORIES:', res);
         });
@@ -236,6 +237,10 @@ const CreateNewTender = ({
       };
 
       const addItem = itemData => {
+        console.log('========= Add item =======');
+        console.log('------ items --------');
+        console.log(items);
+        console.log('------ /items --------');
         setItems([...items, itemData]);
       };
 
@@ -301,6 +306,10 @@ const CreateNewTender = ({
                                 await setActiveOverlay(false);
                                 await setIsLoading(true);
                                 await setPage(0);
+                                console.log(`-----------------------`);
+                                console.log(`items: ${items}`);
+                                console.log(`-----------------------`);
+                                console.log(`items count: ${items.length}`);
                                 await createTenderFunction(
                                     {
                                       ...tender,
@@ -332,6 +341,7 @@ const CreateNewTender = ({
                                       getItem={getItem}
                                       getItemList={getItemList}
                                       addItem={addItem}
+                                      userToken={userData.token}
                   />
                   <View style={styles.title}>
                     <PageTitle text={'Створення заявки'}/>

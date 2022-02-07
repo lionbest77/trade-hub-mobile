@@ -64,6 +64,8 @@ const MainScreen2 = (props) => {
       if (res?.data?.length !== 0) {
         setPage((prevPage) => prevPage + 1);
         setTenders((prev) => [...prev, ...res.data]);
+        // TODO: need to modify
+        //console.log(res.data);
       }
       setRefresh(Boolean(res.data.length));
 

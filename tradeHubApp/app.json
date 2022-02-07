@@ -41,10 +41,9 @@
       "iosDisplayInForeground": true
     },
     "name": "BuyPro",
-    "slug": "expo-template-bare",
+    "slug": "BuyPro",
     "privacy": "public",
-    "sdkVersion": "40.0.0",
-    "version": "1.0.4",
+    "version": "1.0.4.1",
     "entryPoint": "node_modules/expo/AppEntry.js",
     "platforms": [
       "ios",
