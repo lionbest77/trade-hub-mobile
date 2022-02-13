@@ -298,6 +298,9 @@ const MainScreen2 = (props) => {
           }
         />
       </View>
+      {
+        console.log(tenders)
+      }
       {isLoading ? (
         <View style={styles.loaderContainer}>
           <ActivityIndicator size="large" color={COLORS.main} />

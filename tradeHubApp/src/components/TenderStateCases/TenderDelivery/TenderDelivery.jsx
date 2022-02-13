@@ -115,6 +115,7 @@ const TenderDelivery = ({initActiveState = true, ...props}) => {
                   index={index}
                   tendrId={props.tender._id}
                   delivery={true}
+                  token={token}
               />
           )))}
         </ScrollView>

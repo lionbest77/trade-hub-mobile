@@ -306,17 +306,22 @@ const CreateNewTender = ({
                                 await setActiveOverlay(false);
                                 await setIsLoading(true);
                                 await setPage(0);
-                                console.log(`-----------------------`);
-                                console.log(`items: ${items}`);
-                                console.log(`-----------------------`);
-                                console.log(`items count: ${items.length}`);
+                                // console.log(`-----------------------`);
+                                // console.log(`items: ${items}`);
+                                // console.log(`-----------------------`);
+                                // console.log(`items count: ${items.length}`);
+                                // TODO: pass status code
+                                const responseObject = {
+                                  ...tender,
+                                  company_id: userData.company_ID,
+                                  token: userData.token,
+                                  items: items,
+                                  status_code: items.length > 0 ? 3 : 0,
+                                };
+                                
+                                
                                 await createTenderFunction(
-                                    {
-                                      ...tender,
-                                      company_id: userData.company_ID,
-                                      token: userData.token,
-                                      items: items,
-                                    },
+                                    responseObject,
                                     audioData && {...audioData},
                                     arrayOfDocument,
                                 ).finally(() => {

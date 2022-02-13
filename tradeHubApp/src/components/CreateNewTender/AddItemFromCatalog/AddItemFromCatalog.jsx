@@ -602,7 +602,7 @@ const AddItemFromCatalog = ({
 
           <ScrollView ref={formRef} nestedScrollEnabled = {true}>
             <View style={{ flex: 1, paddingTop: 30, paddingBottom: 25 }}>
-              {(() => {
+              {(() => { 
                 switch (productScreenGroupNumber) {
                   case 0:
                     return <ComponentSelectFromCatalog />;

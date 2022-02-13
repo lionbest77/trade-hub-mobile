@@ -3,8 +3,10 @@
 // export const DEFAULT_URL = "https://impltech.test.buypro.team/api";
 // export const SOCKET_URL = "https://impltech.test.buypro.team";
 
-export const DEFAULT_URL = "https://backoffice.buypro.team/api";
-export const SOCKET_URL = "http://backoffice.buypro.team";
+// export const DEFAULT_URL = "https://backoffice.buypro.team/api";
+export const DEFAULT_URL = "https://dev-back.buypro.team/api";
+// export const SOCKET_URL = "http://backoffice.buypro.team";
+export const SOCKET_URL = "https://dev-back.buypro.team";
 
 // drp2, dead 20/03/2020
 

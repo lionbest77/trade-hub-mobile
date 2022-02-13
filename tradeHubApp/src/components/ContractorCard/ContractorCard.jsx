@@ -1,13 +1,16 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Image, View, Text, Alert } from 'react-native';
 
 import COLORS from '../../constants/Colors.js';
 import {styles} from './style.js';
+import axios from 'axios';
+import {DEFAULT_URL} from '../../constants/Req.js';
 
 import CrossIcon from '../../ui/icons/CrossIcon';
 import MainButton from '../buttons/MainButton/MainButton';
 import CheckMarkIcon from '../../ui/icons/CheckMarkIcon';
 import GreenCheckMarkIcon from '../../ui/icons/GreenCheckMarkIcon';
+import {Overlay} from 'react-native-elements';
 
 import deliveryCarImage from '../../assets/images/deliveryCar.png'; 
 import { ProgressBarAndroidComponent } from 'react-native';
@@ -43,13 +46,13 @@ const ContractorCard = props => {
   const goodsName = tender_item?.item?.name ? tender_item.item.name : null;
   const setActiveOverlay = props.setActiveOverlay;
   const setActiveOverlayDel = props.setActiveOverlayDel;
-  const setActiveOverlayDeliveryAccept = props.setActiveOverlayDeliveryAccept;
 
   const text = (isApprove && isApprove === true) ? `Підтверждено` : `Відхилено`;
-  const productStatusText = props.item.sent ? 'У дорозі' : 'Очікується';
+  const productStatusText = props.item.sent ? (props.item.received ? 'Отримано' : 'У дорозі') : 'Очікується';
   const textColor = (isApprove && isApprove === true) ?
       COLORS.good :
       COLORS.main;
+  const [activeOverlayDelivveryAccept, setActiveOverlayDeliveryAccept] = useState(false);
 
   let createData = new Date(created_at);
 
@@ -65,6 +68,38 @@ const ContractorCard = props => {
 
   const alertShow = () => {
     Alert.alert('Недостатньо прав', 'на виконання даних дій', [{text: 'OK'}]);
+  };
+
+  const deliveryAccepted = async idd => {
+    // TODO: Add Implementation for delivery success (integrate with API)
+    setActiveOverlayDeliveryAccept(!activeOverlayDelivveryAccept);
+    // setIsLoading(true);
+
+    const body = [
+      {
+      "_id": idd,
+      "received": true
+      }
+    ]
+ 
+    const options = {
+      headers: {'Authorization': `Bearer ${props.token}`},
+    }
+  
+    axios.patch(`${DEFAULT_URL}/offers/update-status/received`, body, options)
+      .then(res => {
+          // setIsApprove(!isApprove);
+          console.log('Success updated');
+          console.log(res);
+        },
+      )
+        .catch(err => console.log(err));
+    // setIsLoading(false);
+  };
+
+
+  const closeOverlay = () => {
+    setActiveOverlayDeliveryAccept(false);
   };
 
   return (<View style={styles.container}>
@@ -155,8 +190,9 @@ const ContractorCard = props => {
               </View>
 
               {
-                props.item.sent && <View style={{ width: "15%" }}>
-                <Image source={ deliveryCarImage } style={{ width: 40, height: 40 }} /> 
+                props.item.sent && !props.item.received &&
+                <View style={{ width: "15%" }}>
+                  <Image source={ deliveryCarImage } style={{ width: 40, height: 40 }} /> 
                 </View>
               }
 
@@ -168,9 +204,7 @@ const ContractorCard = props => {
         }
 
 
-{/* {delivery ? null : ((isApprove === null) &&  */}
-
-
+      {/* {delivery ? null : ((isApprove === null) &&  */}
 
       {
          delivery ? null : ((isApprove === null) && (<MainButton
@@ -283,36 +317,80 @@ const ContractorCard = props => {
       </Text>
 
       {
-        // TODO: ADD "DELIVERY ACCEPTED" BUTTON
-        // delivery && props.item.sent
-        // && (
-        //   <View style={styles.deliverySuccessWrapper}>
-        //     <View style={{ width: "40%" }}></View>
-
-        //     <View style={{ width: "50%" }}>
-        //     <MainButton
-        //         icon={<GreenCheckMarkIcon />}
-        //         backgroundColor={"#fff"}
-        //         rightBorderNone={true}
-        //         width={"100%"}
-        //         label={"Отримано"}
-        //         containerRight={true} 
-        //         onPress={
-        //           // props.role ы
-        //           // ? 
-        //           () => {
-        //             //setIndex(index);
-        //             //setCurId(curId);
-        //             //setActiveOverlayDeliveryAccept(true);
-        //           } 
-        //           // : alertShow
-        //         }
-        //       />
-        //     </View>
-        //   </View>
-        // )
+          console.log(props.item)
       }
 
+      {
+        // TODO: ADD "DELIVERY ACCEPTED" BUTTON
+        delivery 
+        && props.item.sent 
+        && !props.item.delivered 
+        && !props.item.received
+        && (
+          <View style={styles.deliverySuccessWrapper}>
+            <View style={{ width: "40%" }}></View>
+
+            <View style={{ width: "50%" }}>
+            <MainButton
+                icon={<GreenCheckMarkIcon />}
+                backgroundColor={"#fff"}
+                rightBorderNone={true}
+                width={"100%"}
+                label={"Отримано"}
+                containerRight={true} 
+                onPress={
+                  // props.role
+                  // ? 
+                  () => {
+                    // setIndex(index); 
+                    // setCurId(curId); 
+                    setActiveOverlayDeliveryAccept(true);
+                    // setActiveOverlay(true);
+                    console.log('--------');
+                    // console.log(props.token);
+                    // props.deliveryAccepted(curId)
+                  } 
+                  // : alertShow
+                  // : () => {
+                  //   setIndex(index);
+                  //   setCurId(curId);
+                  // }
+                }
+              />
+            </View>
+          </View>
+        )
+      }
+
+        <Overlay
+            isVisible={activeOverlayDelivveryAccept}
+            overlayStyle={styles.overlayContainer}
+            onBackdropPress={closeOverlay}
+        >
+          <Text style={styles.text}>
+            Ви впевнені, що хочете пiдтвердити отримання товару?
+          </Text>
+          <View style={styles.buttonsContainer}>
+            <View>
+              <MainButton
+                  width={80}
+                  leftBorderNone
+                  icon={<CrossIcon/>}
+                  onPress={() => setActiveOverlayDeliveryAccept(false)}
+              />
+            </View>
+            <View>
+              <MainButton
+                  width={80}
+                  rightBorderNone
+                  backgroundColor={'#27AE60'}
+                  icon={<CheckMarkIcon/>}
+                  onPress={() => deliveryAccepted(props.item._id)}
+                  // onPress={() => addSupplier(index)}
+              />
+            </View>
+          </View>
+        </Overlay>
       
 
     </View>

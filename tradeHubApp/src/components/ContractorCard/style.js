@@ -85,5 +85,27 @@ export const styles = StyleSheet.create({
     flexDirection: "row",
     marginBottom: 22,
     justifyContent: "space-between",
-  }
+  },
+  overlayContainer: {
+    height: 230,
+    width: "90%",
+    borderRadius: 10,
+    paddingTop: 50,
+    paddingBottom: 20,
+    justifyContent: "space-between",
+    paddingHorizontal: 0
+  },
+  buttonsContainer: {
+    width: "100%",
+    flexDirection: "row",
+    justifyContent: "space-between"
+  },
+  text: {
+    textAlign: "center",
+    fontWeight: "bold",
+    paddingHorizontal: 32,
+    fontSize: 16,
+    color: "#333",
+    lineHeight: 22
+  },
 });

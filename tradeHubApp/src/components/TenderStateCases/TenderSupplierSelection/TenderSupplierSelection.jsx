@@ -209,20 +209,26 @@ const TenderSupplierSelection = ({initActiveState = false, ...props}) => {
   const deliveryAccepted = async idd => {
     // TODO: Add Implementation for delivery success (integrate with API)
     setActiveOverlayDel(!activeOverlayDel);
-    // setIsLoading(true);
-    // const authOptions = {
-    //   method: 'PATCH',
-    //   headers: {'Authorization': `Bearer ${token}`},
-    //   url: `${DEFAULT_URL}/tenders/${tender._id}/refuseOffer/${idd}`,
-    // };
+    setIsLoading(true);
 
-    // await axios(authOptions).then(res => {
-    //       setIsApprove(!isApprove);
-    //     },
-    // )
-    //     // .then(res => props.statusSetter(res.status_code))
-    //     .catch(err => console.log(err));
-    // setIsLoading(false);
+    const body = [
+      {
+      "_id": idd,
+      "received": true
+      }
+  ]
+ 
+    const options = {
+      headers: {'Authorization': `Bearer ${token}`},
+    }
+  
+    axios.patch(`${DEFAULT_URL}/offers/update-status/received`, body, options)
+      .then(res => {
+          setIsApprove(!isApprove);
+        },
+      )
+        .catch(err => console.log(err));
+    setIsLoading(false);
   };
 
   const closeOverlay = () => {
@@ -245,6 +251,8 @@ const TenderSupplierSelection = ({initActiveState = false, ...props}) => {
                   item={item}
                   index={iterator-1}
                   curId={item._id}
+                  deliveryAccepted={deliveryAccepted}
+                  token={token}
                   tendrId={props.tender._id}
                   setActiveOverlay={setActiveOverlay}
                   setActiveOverlayDeliveryAccept={setActiveOverlayDeliveryAccept}
