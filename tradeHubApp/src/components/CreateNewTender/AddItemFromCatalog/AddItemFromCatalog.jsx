@@ -76,7 +76,7 @@ const AddItemFromCatalog = ({
           }
         },
     ).catch(err => console.log('Error get subcategories', err));
-  };
+  }; 
 
   const getItemsFromCategory = async (id) => {
     // console.log(userToken);
