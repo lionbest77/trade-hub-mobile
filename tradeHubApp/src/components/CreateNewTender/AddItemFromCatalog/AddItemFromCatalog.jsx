@@ -28,6 +28,7 @@ const AddItemFromCatalog = ({
                               getItemList,
                               screenNumber = 0,
                               getScreenNumber,
+                              getRootCategoryByCategoryId,
                               userToken,
                             }) => {
   const [items, setItems] = useState([]);
@@ -340,16 +341,31 @@ const AddItemFromCatalog = ({
   const handleAddItem = () => {
     if (itemFullObject?._id && !isNaN(Number(amount)) &&
         !isNaN(Number(maxPrice))) {
-      let itemData = {
-        name: itemFullObject.name,
-        item: {_id: itemFullObject._id},
-        category: {_id: itemFullObject.category._id},
-        amount: Number(amount),
-        maxPrice: Math.ceil(Number(maxPrice)),
-        measureUnit: itemFullObject.measureUnit,
-      };
-      addItem(itemData);
-      closeForm();
+
+      // console.log(itemFullObject);
+      console.log();
+
+      getRootCategoryByCategoryId(itemFullObject.category._id)
+          .then((res) => {
+            let parentCategory = itemFullObject.category._id;
+
+            if(res.parent_category) {
+              parentCategory = res.parent_category._id;
+            }
+
+            console.log(`parentCategory: ${parentCategory}`);
+
+            let itemData = {
+              name: itemFullObject.name,
+              item: {_id: itemFullObject._id},
+              category: {_id: parentCategory},
+              amount: Number(amount),
+              maxPrice: Math.ceil(Number(maxPrice)),
+              measureUnit: itemFullObject.measureUnit,
+            };
+            addItem(itemData);
+            closeForm();
+          });
     }
   };
 

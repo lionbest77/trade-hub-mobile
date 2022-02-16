@@ -236,6 +236,13 @@ const CreateNewTender = ({
         ).then(res => res.json());
       };
 
+      const getRootCategoryByCategoryId = async (categoryId) => {
+        // https://dev-back.buypro.team/api/categories/1a678ceb-d7af-41f8-9054-5e23f8b087cc
+        return fetch(`${DEFAULT_URL}/categories/${categoryId}`,
+            {headers: {'Authorization': `Bearer ${userData.token}`}},
+        ).then(res => res.json());
+      };
+
       const addItem = itemData => {
         console.log('========= Add item =======');
         console.log('------ items --------');
@@ -316,9 +323,8 @@ const CreateNewTender = ({
                                   company_id: userData.company_ID,
                                   token: userData.token,
                                   items: items,
-                                  status_code: items.length > 0 ? 3 : 0,
+                                  status_code: items.length > 0 ? 2 : 0,
                                 };
-                                
                                 
                                 await createTenderFunction(
                                     responseObject,
@@ -345,6 +351,7 @@ const CreateNewTender = ({
                                       getCategory={getCategory}
                                       getItem={getItem}
                                       getItemList={getItemList}
+                                      getRootCategoryByCategoryId={getRootCategoryByCategoryId}
                                       addItem={addItem}
                                       userToken={userData.token}
                   />
