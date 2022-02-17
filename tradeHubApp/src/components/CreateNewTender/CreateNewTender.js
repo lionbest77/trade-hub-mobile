@@ -323,7 +323,7 @@ const CreateNewTender = ({
                                   company_id: userData.company_ID,
                                   token: userData.token,
                                   items: items,
-                                  status_code: items.length > 0 ? 2 : 0,
+                                  status_code: items.length > 0 ? 1 : 0,
                                 };
                                 
                                 await createTenderFunction(
