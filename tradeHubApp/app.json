@@ -9,7 +9,7 @@
       },
       "icon": "src/assets/icon-ios-1024@1x.png",
       "bundleIdentifier": "com.buypro",
-      "buildNumber": "1.0.4",
+      "buildNumber": "1.1.2",
       "config": {
         "googleSignIn": {
           "reservedClientId": "com.googleusercontent.apps.362356516786-kceuvv95ocqsl7u4qaqpk8fs2lkoa18d"
@@ -28,13 +28,14 @@
       "package": "com.buypro",
       "useNextNotificationsApi": true,
       "googleServicesFile": "./google-services.json",
-      "config": {
-        "googleSignIn": {
-          "apiKey": "AIzaSyCce2X1ADr4n4cByQ68le_ViSATO6R4Xeg",
-          "certificateHash": "9A1BE00878759C932D838920F887141B14E02B0A"
-        }
-      },
-      "versionCode": 4
+      "versionCode": 21,
+      "permissions": [
+        "NOTIFICATIONS",
+        "CAMERA",
+        "CAMERA_ROLL",
+        "READ_EXTERNAL_STORAGE",
+        "RECORD_AUDIO"
+      ]
     },
     "notification": {
       "icon": "./src/assets/logo.png",
@@ -43,7 +44,7 @@
     "name": "BuyPro",
     "slug": "BuyPro",
     "privacy": "public",
-    "version": "1.0.4.1",
+    "version": "1.1.2",
     "entryPoint": "node_modules/expo/AppEntry.js",
     "platforms": [
       "ios",
