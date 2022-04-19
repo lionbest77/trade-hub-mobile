@@ -8,6 +8,8 @@ import {styles} from '../style';
 import validationSchema from '../validation';
 import {SET_USER_PROFILE} from '../../../store/reduxConstants';
 
+import i18n from '../../../services/localization';
+
 const UserData = (props) => {
 
   // console.log('-------------', props.userProfile, '---------------- USER Data-------------');
@@ -38,7 +40,7 @@ const UserData = (props) => {
             }) => (
               <View style={styles.formContainer}>
 
-                <Text style={styles.registrationInputLabel}>Прізвище</Text>
+                <Text style={styles.registrationInputLabel}>{i18n.t('last_name')}</Text>
                 <TextInput
                     style={styles.registrationInput}
                     name="lastName"
@@ -52,7 +54,7 @@ const UserData = (props) => {
                 />
                 <Text style={styles.errorsStyle}>{touched.lastName && errors.lastName}</Text>
 
-                <Text style={styles.registrationInputLabel}>Ім’я </Text>
+                <Text style={styles.registrationInputLabel}>{i18n.t('name')}</Text>
                 <TextInput
                     autoCapitalize='words'
                     name="name"
@@ -67,7 +69,7 @@ const UserData = (props) => {
                 />
                 <Text style={styles.errorsStyle}>{touched.name ? errors.name : null}</Text>
 
-                <Text style={styles.registrationInputLabel}>По батькові</Text>
+                <Text style={styles.registrationInputLabel}>{i18n.t('surname')}</Text>
                 <TextInput
                     autoCapitalize='words'
                     name="surname"

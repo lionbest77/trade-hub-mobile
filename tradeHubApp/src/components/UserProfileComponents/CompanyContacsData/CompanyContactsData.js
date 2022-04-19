@@ -8,6 +8,7 @@ import {styles} from '../style';
 import validationSchema from '../validation';
 import {GET_AUTH_TAB, SET_COMPANY_PROFILE, SET_USER_PROFILE} from '../../../store/reduxConstants';
 
+import i18n from '../../../services/localization'
 
 const CompanyContactsData = (props) => {
 
@@ -45,7 +46,7 @@ const CompanyContactsData = (props) => {
       }) => (
         <View style={styles.formContainerSmall}>
 
-          <Text style={styles.registrationInputLabel}>Email</Text>
+          <Text style={styles.registrationInputLabel}>{i18n.t('email')}</Text>
           <TextInput
               style={styles.registrationInput}
               name="companyEmail"
@@ -58,7 +59,7 @@ const CompanyContactsData = (props) => {
           />
           <Text style={styles.errorsStyle}>{touched.companyEmail && errors.companyEmail}</Text>
 
-          <Text style={styles.registrationInputLabel}>Номер телефону</Text>
+          <Text style={styles.registrationInputLabel}>{i18n.t('phone_number')}</Text>
           <TextInput
               name="phoneOfCompany"
               onChangeText={(value)=>{
@@ -73,7 +74,7 @@ const CompanyContactsData = (props) => {
              />
           <Text style={styles.errorsStyle}>{touched.phoneOfCompany && errors.phoneOfCompany}</Text>
 
-          <Text style={styles.registrationInputLabel}>Додатковий номер телефону </Text>
+          <Text style={styles.registrationInputLabel}>{i18n.t('additional_phone_number')}</Text>
           <TextInput
               name="extraPhoneOfCompany"
               onChangeText={(value)=>{
@@ -89,7 +90,7 @@ const CompanyContactsData = (props) => {
           />
           <Text style={styles.errorsStyle}>{touched.extraPhoneOfCompany && errors.extraPhoneOfCompany}</Text>
 
-          <Text style={styles.registrationInputLabel}>Адреса доставки документів</Text>
+          <Text style={styles.registrationInputLabel}>{i18n.t('docs_delivery_address')}</Text>
           <TextInput
               name="deliveryAddressOfDocuments"
               onChangeText={(value)=>{
@@ -104,7 +105,7 @@ const CompanyContactsData = (props) => {
           />
           <Text style={styles.errorsStyle}>{touched.deliveryAddressOfDocuments && errors.deliveryAddressOfDocuments}</Text>
 
-          <Text style={styles.registrationInputLabel}>Адреса доставки товарів</Text>
+          <Text style={styles.registrationInputLabel}>{i18n.t('gods_delivery_address')}</Text>
           <TextInput
               name="deliveryAddressOfProducts"
               onChangeText={(value)=>{

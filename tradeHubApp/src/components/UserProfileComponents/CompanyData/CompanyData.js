@@ -18,6 +18,8 @@ import ArrowUp from '../../../ui/icons/ArrowUp';
 import {GET_AUTH_TAB, SET_COMPANY_PROFILE, SET_EMPLOYEES, SET_USER_PROFILE} from '../../../store/reduxConstants';
 import validationSchema from '../validation';
 
+import i18n from '../../../services/localization'
+
 const CompanyData = (props) => {
 
   // console.log(props.companyProfile, '----------PROPS FROM CompanyData---------');
@@ -49,7 +51,7 @@ const CompanyData = (props) => {
         onBackdropPress={closeOverlay}
     >
       <Text style={styles.text}>
-        Ви додали максимальну кількість співробітників
+        {i18n.t('added_max_employees')}
       </Text>
       <View style={styles.buttonsContainer}>
         <View>
@@ -81,7 +83,7 @@ const CompanyData = (props) => {
       {({
           values, handleSubmit, handleChange, handleBlur, isSubmitting, errors, touched, setFieldValue
         }) => (<View style={styles.formContainer}>
-        <Text style={styles.registrationInputLabel}>Назва компанії</Text>
+        <Text style={styles.registrationInputLabel}>{i18n.t('company_name')}</Text>
         <TextInput
             style={styles.registrationInput}
             name="companyName"
@@ -103,7 +105,7 @@ const CompanyData = (props) => {
 
 
             <View style={{width: '40%'}}>
-              <Text style={styles.registrationInputLabel}>ЄДРПОУ</Text>
+              <Text style={styles.registrationInputLabel}>{i18n.t('EDRPOU')}</Text>
               <TextInput
                   name="EDRPOU"
                   onChangeText={(value) => {
@@ -119,7 +121,7 @@ const CompanyData = (props) => {
 
             </View>
             <View style={{width: '55%'}}>
-              <Text style={styles.registrationInputLabel}>IBAN номер</Text>
+              <Text style={styles.registrationInputLabel}>{i18n.t('IBAN')}</Text>
               <TextInput
                   maxLength={31}
                   name="accountOfCompany"
@@ -154,7 +156,7 @@ const CompanyData = (props) => {
         <Divider style={styles.line}/>
 
         <AccordionButton
-            text={'Контакти компанії'}
+            text={i18n.t('company_contacts')}
             initActiveState
             small={true}
             content={<CompanyContactsData
@@ -169,7 +171,7 @@ const CompanyData = (props) => {
         <Divider style={styles.line}/>
 
         <AccordionButton
-            text={'Список співробітників компанії'}
+            text={i18n.t('employees_company_list')}
             initActiveState
             small={true}
             content={<View>

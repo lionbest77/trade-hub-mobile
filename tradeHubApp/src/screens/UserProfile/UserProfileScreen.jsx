@@ -13,6 +13,7 @@ import {
   ActivityIndicator,
   KeyboardAvoidingView,
   Platform,
+  I18nManager,
 } from 'react-native';
 import {Overlay} from 'react-native-elements';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -22,6 +23,7 @@ import axios from 'axios';
 
 import {NewEmployeeCard} from '../../components/UserProfileComponents/EmployeeCard/NewEmployeeCard';
 import UserControlButton from '../../components/buttons/UserControlButton/UserControlButton';
+import LanguageButton from '../../components/buttons/LanguageButton/LanguageButton';
 import AccordionButton from '../../components/buttons/AccordionButton/AccordionButton';
 import ContactsData from '../../components/UserProfileComponents/ContactsData/ContactsData';
 import CompanyData from '../../components/UserProfileComponents/CompanyData/CompanyData';
@@ -46,11 +48,16 @@ import CrossIcon from '../../ui/icons/CrossIcon';
 import ArrowUp from '../../ui/icons/ArrowUp';
 import { removeDeviceToken } from '../../utils/authorization';
 
+import DropDownPicker from 'react-native-dropdown-picker';
+import i18n from '../../services/localization';
+import { setStatusBarNetworkActivityIndicatorVisible } from 'expo-status-bar';
+
 const UserProfileScreen = props => {
 
   const {width} = Dimensions.get('window');
 
   const [inviteUserActive, setInviteUserActive] = useState(false);
+  const [languageContainerActive, setLanguageContainerActive] = useState(false);
   const [changesOverlay, setChangesOverlay] = useState(false);
   const [activeOverlay, setActiveOverlay] = useState(false);
   const [exitOverlay, setExitOverlay] = useState(false);
@@ -59,6 +66,15 @@ const UserProfileScreen = props => {
   const [isChanged, setIsChanged] = useState(false);
   const [newUsers, setNewUsers] = useState([]);
   const scrollRef = useRef(null);
+
+  const [locale, setLocale] = useState('en');
+
+  // const [open, setOpen] = useState(false);
+  // const [value, setValue] = useState(null);
+  // const [items, setItems] = useState([
+  //   { label: 'Apple', value: 'apple' },
+  //   { label: 'Banana', value: 'banana' }
+  // ]);
 
   const url = `${DEFAULT_URL}/users/${props.userData.user_ID}/profile`;
   let newUsersObj;
@@ -170,15 +186,15 @@ const UserProfileScreen = props => {
   };
 
   const logoutHandler = () => {
-    Alert.alert('Ви впевнені, що хочете вийти?', 'У разі незбережених даних вони будуть втрачені', [
+    Alert.alert(i18n.t('want_to_quit'), i18n.t('data_will_lost'), [
       {
-        text: 'Так', onPress: async () => {
+        text: i18n.t('yes'), onPress: async () => {
           await removeDeviceToken();
           props.navigation.navigate('Login');
           await AsyncStorage.removeItem("tradeHubUser");
         },
       }, {
-        text: 'Ні',
+        text: i18n.t('no'),
       }]);
   };
 
@@ -231,8 +247,8 @@ const UserProfileScreen = props => {
     try {
      fetchUserProfile();
     }catch (e) {
-      Alert.alert("Технічна помилка!", `${e.response.data}`, [
-        { text: "OK" }
+      Alert.alert(i18n.t('tech_error'), `${e.response.data}`, [
+        { text: i18n.t('ok') }
       ]);
     }
   }, []);
@@ -241,13 +257,13 @@ const UserProfileScreen = props => {
       <KeyboardAvoidingView style={{ height: '100%', width: '100%' }} behavior={Platform.OS === 'ios' ? 'padding' : null} enabled >
       <View style={styles.mainContainer}>
 
-       <Overlay
+      <Overlay
         isVisible={exitOverlay}
         overlayStyle={styles.overlayContainer}
-        >
-         <>
+      >
+        <>
         <Text style={styles.text}>
-       Зберегти зміни?
+          {i18n.t('save_changes') + '?'}
         </Text>
         <View style={styles.buttonsContainer2}>
           <View>
@@ -268,7 +284,7 @@ const UserProfileScreen = props => {
             />
           </View>
         </View>
-         </>
+        </>
       </Overlay>
         <Overlay
             isVisible={activeOverlay}
@@ -276,7 +292,7 @@ const UserProfileScreen = props => {
         >
           <>
           <Text style={styles.text}>
-            Ви додали максимальну кількість співробітників
+            {i18n.t('added_max_employees')}
           </Text>
           <View style={styles.buttonsContainer}>
             <View>
@@ -292,7 +308,7 @@ const UserProfileScreen = props => {
         >
           <>
           <Text style={styles.text}>
-             Дякуємо, зміни у Вашому профілі будут збережені!
+            {i18n.t('profile_changes_saved')}
           </Text>
           <View style={styles.buttonsContainer}>
             <View>
@@ -331,28 +347,31 @@ const UserProfileScreen = props => {
             <ScrollView ref={scrollRef} >
               <View>
                 <AccordionButton
-                    text="Особисті дані"
+                    text = {i18n.t('personal_data')}
                     initActiveState={initActive}
                     content={<UserData setIsChanged={setIsChanged}/>}
                     style={(width >= 600) ? {fontSize: 22, color: 'black'} :  (width <= 350) ? {fontSize: 13, color: 'black'} : {fontSize: 16, color: 'black'}}
                 />
+
                 <AccordionButton
                     initActiveState={initActive}
-                    text="Контактна інформація"
+                    text = {i18n.t('contact_info')}
                     content={<ContactsData setIsChanged={setIsChanged} />}
                     style={(width >= 600) ? {fontSize: 22, color: 'black'} :  (width <= 350) ? {fontSize: 13, color: 'black'} : {fontSize: 16, color: 'black'}}
                 />
+
                 <AccordionButton
                     initActiveState={initActive}
-                    text="Компанія"
+                    text = {i18n.t('company')}
                     content={<CompanyData
                         scrollRef={scrollRef}
                         setIsChanged={setIsChanged}
                     />}
                     style={(width >= 600) ? {fontSize: 22, color: 'black'} :  (width <= 350) ? {fontSize: 13, color: 'black'} : {fontSize: 16, color: 'black'}}
                 />
+
                 <View style={styles.switchContainer}>
-                  <Text style={styles.switchText}>Двофакторна автентифікація</Text>
+                  <Text style={styles.switchText}>{i18n.t('two_factor_auth')}</Text>
                   <Switch
                       thumbColor="#fff"
                       ios_backgroundColor={{false: '#C4C4C4', true: COLORS.main}}
@@ -364,8 +383,9 @@ const UserProfileScreen = props => {
                       }}
                   />
                 </View>
+
                 <View style={styles.switchContainer}>
-                  <Text style={styles.switchText}>Повідомлення</Text>
+                  <Text style={styles.switchText}>{i18n.t('notifications')}</Text>
                   <Switch
                       thumbColor="#fff"
                       ios_backgroundColor={{false: '#C4C4C4', true: COLORS.main}}
@@ -377,26 +397,78 @@ const UserProfileScreen = props => {
                       }}
                   />
                 </View>
+
                 <TouchableOpacity onPress={() => props.navigation.navigate('FAQ')}>
                   <View style={styles.switchContainer}>
-                    <Text style={styles.switchText}>FAQ</Text>
+                    <Text style={styles.switchText}>{i18n.t('FAQ')}</Text>
                     <Image source={require('../../assets/images/FAQArrow.png')}/>
                   </View>
                 </TouchableOpacity>
+
                 <TouchableOpacity
                     onPress={() => {
                       setInviteUserActive(!inviteUserActive);
+                      setLanguageContainerActive(false)
                       setTimeout(() => {
                         scrollRef.current.scrollToEnd();
                       }, 100);
                     }}
                 >
                   <View style={styles.switchContainer}>
-                    <Text style={styles.switchText}>Запрошення користувачів</Text>
+                    <Text style={styles.switchText}>{i18n.t('invite_users')}</Text>
                     {inviteUserActive ? <ArrowUp/> : <ArrowDown/>}
                   </View>
-
                 </TouchableOpacity>
+
+                <TouchableOpacity onPress={() => {
+                  setInviteUserActive(false);
+                  setLanguageContainerActive(!languageContainerActive)
+                  setTimeout(() => {
+                    scrollRef.current.scrollToEnd();
+                  }, 100);
+                }} >
+                  <View style={styles.switchContainer}>
+                    <Text style={styles.switchText}>{i18n.t('settings_language_title')}</Text>
+                    {languageContainerActive ? <ArrowUp/> : <ArrowDown/>}
+                  </View>
+                </TouchableOpacity>
+
+                {languageContainerActive && (<View style={{paddingHorizontal: 30}}>
+                      <View style={{marginBottom: 30}}>
+                        <LanguageButton
+                          onPress={() => {
+                            i18n.locale = "uk";
+                            setLocale("uk");
+                            // TODO: Refresh Settings screen
+                          }}
+                          locale="uk"
+                          name = "Український"
+                        />
+
+                        <LanguageButton
+                          onPress={() => {
+                            i18n.locale = "en";
+                            setLocale("en");
+                            // TODO: Refresh Settings screen
+                          }}
+                          locale = "en"
+                          name = "English"
+                        />
+
+                        <LanguageButton
+                          onPress={() => {
+                            i18n.locale = "de";
+                            setLocale("de");
+                            // TODO: Refresh Settings screen
+                          }}
+                          locale = "de"
+                          name = "German"
+                        />
+                      </View>
+
+                    </View>
+                )}
+
                 {inviteUserActive && (<View style={{paddingHorizontal: 30}}>
                       <View style={{marginBottom: (width >= 600) ? '5%' : '10%'}}>
                         {newUsers.map(item => (
@@ -429,7 +501,7 @@ const UserProfileScreen = props => {
                     backgroundColor={!isChanged ? COLORS.disableBtnColor : COLORS.main }
                     smallFontSize={(width >= 600) ? 24 : 18}
                     containerLeft={true}
-                    label={'Зберегти зміни'}
+                    label={i18n.t('save_changes')}
                     height={(width >= 600) ? 80: 60}
                     onPress={() => isChanged && handleChange()}
                     icon={<CheckMarkIcon/>}

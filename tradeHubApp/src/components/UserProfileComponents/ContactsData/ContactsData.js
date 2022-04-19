@@ -12,6 +12,8 @@ import {
 } from '../../../store/reduxConstants';
 import validationSchema from '../validation';
 
+import i18n from '../../../services/localization'
+
 const ContactsData = (props) => {
 
   // console.log(props.userProfile, '----------PROPS FROM ContactsData---------');
@@ -44,7 +46,7 @@ const ContactsData = (props) => {
             }) =>
               (<View style={styles.formContainer}>
 
-                <Text style={styles.registrationInputLabel}>Email</Text>
+                <Text style={styles.registrationInputLabel}>{i18n.t('email')}</Text>
                 <TextInput
                     style={styles.registrationInput}
                     name="email"
@@ -54,7 +56,7 @@ const ContactsData = (props) => {
                 />
                 <Text style={styles.errorsStyle}>{touched.email && errors.email}</Text>
 
-                <Text style={styles.registrationInputLabel}>Номер телефону</Text>
+                <Text style={styles.registrationInputLabel}>{i18n.t('phone_number')}</Text>
                 <TextInput
                     name="phoneOfCompany"
                     onBlur={handleBlur('phoneOfCompany')}
@@ -70,7 +72,7 @@ const ContactsData = (props) => {
                 />
                 <Text style={styles.errorsStyle}>{touched.phoneOfCompany && errors.phoneOfCompany}</Text>
 
-                <Text style={styles.registrationInputLabel}>Додатковий номер телефону</Text>
+                <Text style={styles.registrationInputLabel}>{i18n.t('additional_phone_number')}</Text>
                 <TextInput
                     name="extraPhoneOfCompany"
                     onBlur={handleBlur('extraPhoneOfCompany')}

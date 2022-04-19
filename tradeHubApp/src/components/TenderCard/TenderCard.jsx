@@ -11,6 +11,8 @@ import MainButton from "../../components/buttons/MainButton/MainButton";
 import ChatIcon from "../../ui/icons/ChatIcon";
 import ClipIcon from "../../ui/icons/ClipIcon";
 
+import i18n from '../../services/localization';
+
 import { styles } from "./style.js";
 
 const TenderCard = (props) => {
@@ -108,6 +110,9 @@ const TenderCard = (props) => {
       </View>
 
       <View style={styles.tenderDescriptionContainer}>
+
+        <Text>{i18n.t('welcome')}</Text>
+
         <Text
           style={styles.tenderDescription}
           numberOfLines={5}
@@ -136,7 +141,7 @@ const TenderCard = (props) => {
               })
             }
           />
-           <Text style={unread <= 9 ? styles.counter : styles.counter2}>{unread > 9 ? "9+" : unread === 0 ? null : unread}</Text>
+          <Text style={unread <= 9 ? styles.counter : styles.counter2}>{unread > 9 ? "9+" : unread === 0 ? null : unread}</Text>
         </View>
 
         <View style={{ width: "50%" }}>

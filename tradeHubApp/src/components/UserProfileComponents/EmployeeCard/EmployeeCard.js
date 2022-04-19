@@ -5,6 +5,8 @@ import {styles} from './style';
 import validationSchema from '../../Registration/Validation';
 import UserControlButton from '../../buttons/UserControlButton/UserControlButton';
 
+import i18n from '../../../services/localization'
+
 export const EmployeeCard =(props) => {
 
   // console.log('Props from Employee CArd -----------', props);
@@ -12,15 +14,15 @@ export const EmployeeCard =(props) => {
   const { fullName, email, role, id, remove = false } = props.item;
 
   const users = props.array;
-  const userRole = role.role ? "Повна" : "Неповна";
+  const userRole = role.role ? i18n.t('full') : i18n.t('half');
 
   const deleteUser = () => {
 
-    Alert.alert(` ${fullName} буде видалений із списка співробітників.`, 'Продовжити?', [
+    Alert.alert(fullName + ' ' + i18n.t('will_removed_from_employee_list'), i18n.t('continue'), [
       {
-        text: 'Ні',
+        text: i18n.t('no'),
       }, {
-        text: 'Так', onPress: () => {
+        text: i18n.t('yes'), onPress: () => {
           users.map((el) => {
             if (el.id === id) {
               el.remove = true;
@@ -34,9 +36,9 @@ export const EmployeeCard =(props) => {
   };
 
  const roleHandler = () => {
-    Alert.alert('На жаль у Вас недостатньо прав.', '', [
+    Alert.alert(i18n.t('not_enough_rights'), '', [
       {
-        text: 'Зрозуміло'
+        text: i18n.t('of_course')
       }])
  };
 
@@ -63,7 +65,7 @@ export const EmployeeCard =(props) => {
         handleChange, handleBlur
     }) => (
         <View style={styles.formContainerSmall}>
-          <Text style={styles.registrationInputLabel}>ПІБ співробітника</Text>
+          <Text style={styles.registrationInputLabel}>{i18n.t('employee_pib')}</Text>
           <TextInput
               style={styles.registrationInput}
               name="employeeNames"
@@ -73,7 +75,7 @@ export const EmployeeCard =(props) => {
               editable={false}
            />
 
-          <Text style={styles.registrationInputLabel}>Email співробітника</Text>
+          <Text style={styles.registrationInputLabel}>{i18n.t('employee_email')}</Text>
           <TextInput
               name="employeeEmail"
               onChangeText={handleChange('employeeEmail')}
@@ -83,7 +85,7 @@ export const EmployeeCard =(props) => {
               editable={false}
            />
 
-          <Text style={styles.registrationInputLabel}>Роль співробітника</Text>
+          <Text style={styles.registrationInputLabel}>{i18n.t('employee_role')}</Text>
           <TextInput
               name="employeeRole"
               onChangeText={handleChange('employeeRole')}
