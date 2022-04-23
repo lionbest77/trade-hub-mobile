@@ -8,11 +8,13 @@ import { Text, View, StyleSheet } from "react-native";
 import { connect } from "react-redux";
 /*import { leaveRoom } from "../../../services/chatService.js";*/
 
+import i18n from '../../../services/localization'
+
 const ChatHeader = (props) => {
 /*  const userId = props.userData.user_ID;
   const tenderId = props.navigation.state.params.tenderId;*/
   const createData = props.navigation.state.params.created_at;
-  const request = `Заявка №${props.navigation.state.params.internal_id}`;
+  const request = `${i18n.t('order')} №${props.navigation.state.params.internal_id}`;
 
 /*  const socket = props.socket;*/
 

@@ -232,9 +232,9 @@ const UserProfileScreen = props => {
       setExitOverlay(true);
     }
     else {
-     Alert.alert( 'Невірно заповнені дані'," Необхідно заповнити всі поля для нових співробітників" , [
+      Alert.alert(i18n.t('incorrect_failed_data'), i18n.t('all_employees_must_filled'), [
         {
-          text: 'Зрозуміло',
+          text: i18n.t('of_course'),
           onPress:() =>
           { setInviteUserActive (false) }
         },

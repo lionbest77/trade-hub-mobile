@@ -16,6 +16,8 @@ import COLORS from '../../../constants/Colors';
 import InformText from '../../../ui//InformText/InformText';
 // import validationSchema from ".";
 
+import i18n from '../../../services/localization'
+
 import Tab from "../../Tab/Tab"; 
 
 const AddItemFromCatalog = ({
@@ -315,7 +317,7 @@ const AddItemFromCatalog = ({
   };
 
   const onProductNameChanged = data => {
-    console.log(data);
+    //console.log(data);
     setSearchedProductTitle(data);
     getProductOfSimilarName(data);
   }
@@ -381,7 +383,7 @@ const AddItemFromCatalog = ({
       element: () => (
         <Tab
           buttonIndex={0}
-          label={"з каталогу"}
+          label={i18n.t('from_catalog')}
           selectedIndex={ productScreenGroupNumber }
         />
       )
@@ -390,7 +392,7 @@ const AddItemFromCatalog = ({
       element: () => (
         <Tab
           buttonIndex={1}
-          label={"за назвою"}
+          label={i18n.t('by_name')}
           selectedIndex={ productScreenGroupNumber }
           alignmentRight
         />
@@ -408,14 +410,14 @@ const AddItemFromCatalog = ({
         <Picker
             onItemChange={(data) => setCategory(data)}
             items={categories}
-            title="Категорія товару"
+            title={i18n.t('product_category')}
             item={category}
             isNullable={true}
             style={styles.pikerInput}
             containerStyle={styles.containerStyle}
             placeholderStyle={styles.placeholderStyle}
             textInputStyle={styles.textInputStyle}
-            placeholder={'Категорія товару'}
+            placeholder={i18n.t('product_category')}
         />
         {Array.isArray(subCategories) && !!subCategories?.length &&
         subCategories.map((subCat, index) =>
@@ -423,28 +425,28 @@ const AddItemFromCatalog = ({
                 key={index}
                 onItemChange={(data) => handleSetSubcategory(data, index)}
                 items={subCat}
-                title="Виберіть підкатегорію"
+                title={i18n.t('product_subcategory')}
                 item={subCategory[index]}
                 isNullable={true}
                 style={styles.pikerInput}
                 containerStyle={styles.containerStyle}
                 placeholderStyle={styles.placeholderStyle}
                 textInputStyle={styles.textInputStyle}
-                placeholder={'Виберіть підкатегорію'}
+                placeholder={i18n.t('product_subcategory')}
             />)
         }
         {Array.isArray(items) && !!items.length &&
         <Picker
             onItemChange={selectItem}
             items={items}
-            title="Товар"
+            title={i18n.t('goods')}
             item={selectedItem}
             isNullable={true}
             style={styles.pikerInput}
             containerStyle={styles.containerStyle}
             placeholderStyle={styles.placeholderStyle}
             textInputStyle={styles.textInputStyle}
-            placeholder={'Виберіть товар'}
+            placeholder={i18n.t('choose_product')}
             multiline={true}
             numberOfLines={2}
         />}
@@ -458,7 +460,7 @@ const AddItemFromCatalog = ({
                   required={true}
                   editable={true}
                   security={false}
-                  label={`Кількість (${itemFullObject?.measureUnit})`}
+                  label={`${i18n.t('quantity')} (${itemFullObject?.measureUnit})`}
                   selectTextOnFocus={true}
                   value={amount}
                   onChangeText={changeAmount}
@@ -471,7 +473,7 @@ const AddItemFromCatalog = ({
                   required={true}
                   editable={true}
                   security={false}
-                  label={`Максимальна ціна`}
+                  label={i18n.t('max_price')}
                   selectTextOnFocus={true}
                   value={maxPrice}
                   onChangeText={changeMaxPrice}
@@ -509,7 +511,7 @@ const AddItemFromCatalog = ({
               required={true}
               editable={true}
               security={false}
-              label={`Введіть назву для пошуку товару`}
+              label={i18n.t('enter_product_name')}
               selectTextOnFocus={true}
               value={searchedProductTitle}
               onChangeText={ onProductNameChanged }
@@ -533,9 +535,7 @@ const AddItemFromCatalog = ({
                           paddingHorizontal: '5%',
                         }}
                     >
-                      <InformText>
-                        Нажаль, такого товару не знайдено
-                      </InformText>
+                      <InformText>{i18n.t('no_such_product')}</InformText>
                     </View>
                 )
             }
@@ -556,7 +556,7 @@ const AddItemFromCatalog = ({
                     required={true}
                     editable={true}
                     security={false}
-                    label={`Кількість (${itemFullObject?.measureUnit})`}
+                    label={`${i18n.t('quantity')} (${itemFullObject?.measureUnit})`}
                     selectTextOnFocus={true}
                     value={amount}
                     onChangeText={changeAmount}
@@ -569,7 +569,7 @@ const AddItemFromCatalog = ({
                     required={true}
                     editable={true}
                     security={false}
-                    label={`Максимальна ціна`}
+                    label={i18n.t('max_price')}
                     selectTextOnFocus={true}
                     value={maxPrice}
                     onChangeText={changeMaxPrice}
@@ -602,7 +602,7 @@ const AddItemFromCatalog = ({
           </View>}
 
           <Text style={[styles.textOverlay, {lineHeight: 16, marginBottom: 10}]}>
-            Виберіть товар
+            {i18n.t('choose_product')}
           </Text>
 
           <View style={{ paddingHorizontal: width >= 600 ? 45 : 25 }}>
@@ -638,7 +638,7 @@ const AddItemFromCatalog = ({
                   width={80}
                   height={50}
                   onPress={closeForm}
-                  label={'Назад'}
+                  label={i18n.t('back')}
                   leftBorderNone
                   icon={<CrossIcon/>}
               />
@@ -649,7 +649,7 @@ const AddItemFromCatalog = ({
                   width={80}
                   height={50}
                   onPress={handleAddItem}
-                  label={'Додати'}
+                  label={i18n.t('add')}
                   rightBorderNone
                   disabled={!(itemFullObject._id && amount && maxPrice)}
                   icon={<CheckMarkIcon/>}

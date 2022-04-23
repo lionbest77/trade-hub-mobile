@@ -26,6 +26,8 @@ import BellIcon from "../../ui/icons/BellIcon";
 import PlusIcon from "../../ui/icons/PlusIcon";
 import {AxiosService} from '../../services/axiosService';
 
+import i18n from '../../services/localization'
+
 const MainScreen2 = (props) => {
   let { width, height } = Dimensions.get("window");
 
@@ -146,13 +148,13 @@ const MainScreen2 = (props) => {
 
   const getDataFromLS =async () => {
     let localStorageData = JSON.parse( await AsyncStorage.getItem('tradeHubUser'));
-    if(localStorageData.token){
+    if(localStorageData.token) {
     props.setUserData({
         user_ID: localStorageData.user_ID,
         company_ID: localStorageData.company_ID,
         role: localStorageData.role,
         token: localStorageData.token});
-       }
+    }
   };
 
   const getUnreadMessages = async () => {
@@ -312,7 +314,7 @@ const MainScreen2 = (props) => {
             <PTRView onRefresh={PullToRefreshProject} style={{ paddingTop: 150 }}>
               <View style={styles.tendersContainer}>
                 <Image source={require("../../assets/images/AddTenders.png")} />
-                <InformText>Щоб додати нову заявку натисніть “+”</InformText>
+                <InformText>{i18n.t('to_create_order')}</InformText>
               </View>
             </PTRView>
           </View>
@@ -320,7 +322,7 @@ const MainScreen2 = (props) => {
           <View style={{ flex: 1 }}>
             <TenderAccordion
               filterFunction={filterFunction}
-              text="Заявки"
+              text={i18n.t('bids')}
               active={!isTabOpen}
               setActive={handlerIsTabOpen}
               style={

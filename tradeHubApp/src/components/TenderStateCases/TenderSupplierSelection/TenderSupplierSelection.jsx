@@ -30,6 +30,8 @@ import {styles} from './style.js';
 
 import { GET_ALL_CONTRACTORS, SET_CONTRACTORS } from '../../../store/reduxConstants';
 
+import i18n from '../../../services/localization'
+
 const TenderSupplierSelection = ({initActiveState = false, ...props}) => {
   const [index, setIndex] = useState(0);
   const [curId, setCurId] = useState(0);
@@ -75,7 +77,7 @@ const TenderSupplierSelection = ({initActiveState = false, ...props}) => {
       setIsLoading(false);
     } catch (e) {
       Alert.alert("Tender Supplier", `${e}`, [
-        { text: "OK" }
+        { text: i18n.t('ok') }
       ]);
     }
 
@@ -310,7 +312,7 @@ const TenderSupplierSelection = ({initActiveState = false, ...props}) => {
                       marginLeft: 30,
                     }}а
                 >
-                  <Tab label="Постачальники"/>
+                  <Tab label={i18n.t('suppliers')}/>
                 </View>
               }
               content={
@@ -348,10 +350,7 @@ const TenderSupplierSelection = ({initActiveState = false, ...props}) => {
                                     paddingHorizontal: '5%',
                                   }}
                               >
-                                <InformText>
-                                  Дякуємо, що обрали постачальників. Чекайте на
-                                  зворотній зв'язок від менеджера.
-                                </InformText>
+                                <InformText>{i18n.t('inform_picked_suppliers')}</InformText>
                               </View>
                         )
                       
@@ -397,9 +396,9 @@ const TenderSupplierSelection = ({initActiveState = false, ...props}) => {
             onBackdropPress={closeOverlay}
         >
           <Text style={styles.text}>
-            Ви впевнені, що хочете обрати постачальника
+            {i18n.t('pick_suppplier_p1')}
             "{(contractors.length > 0) && contractors[index].name}"
-            для Вашої заявки?
+            {i18n.t('pick_suppplier_p2')}
           </Text>
           <View style={styles.buttonsContainer}>
             <View>
@@ -429,7 +428,7 @@ const TenderSupplierSelection = ({initActiveState = false, ...props}) => {
             onBackdropPress={closeOverlay}
         >
           <Text style={styles.text}>
-            Ви впевнені, що хочете пiдтвердити отримання товару?
+            {i18n.t('want_confirm_receipt')}
           </Text>
           <View style={styles.buttonsContainer}>
             <View>
@@ -459,9 +458,9 @@ const TenderSupplierSelection = ({initActiveState = false, ...props}) => {
             onBackdropPress={closeOverlay}
         >
           <Text style={styles.text}>
-            Ви впевнені, що хочете відмовитись від послуг постачальника
-            "{(contractors.length > 0) && contractors[index].name}" для Вашої
-            заявки?
+            {i18n.t('decline_suppplier_p1')}
+            "{(contractors.length > 0) && contractors[index].name}" 
+            {i18n.t('decline_suppplier_p2')}
           </Text>
           <View style={styles.buttonsContainer}>
             <View>

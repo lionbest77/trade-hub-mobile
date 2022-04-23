@@ -16,6 +16,7 @@ import MainHeader from "../../components/headers/MainHeader/MainHeader";
 import InformText from "../../ui/InformText/InformText";
 import ArrowLeftIcon from "../../ui/icons/ArrowLeftIcon";
 
+import i18n from "../../services/localization";
 
 class ForgotPassword extends Component {
   state = {
@@ -55,8 +56,8 @@ class ForgotPassword extends Component {
           email: values.email
         });
       } else {
-        Alert.alert("", "Не існує користувача з такими даними ", [
-          {text: "OK"}]);
+        Alert.alert("", i18n.t('not_have_user_by_data'), [
+          {text: i18n.t('ok')}]);
         this.setState({ email: '',  error: false });
       }
   };
@@ -95,7 +96,7 @@ class ForgotPassword extends Component {
             <KeyboardAvoidingView keyboardVerticalOffset={80} style={{ flex: 1 }} behavior={Platform.OS === 'ios' ? 'padding' : null} enabled>
               <View style={styles.mainContainer}>
                 <InformText style={{ marginTop: "25%" }}>
-                  Будь ласка, вкажіть Ваш email
+                  {i18n.t('please_say_email')}
                 </InformText>
 
                 <View>
@@ -116,7 +117,7 @@ class ForgotPassword extends Component {
                   ) : (
                       <MainButton
                           width={"100%"}
-                          label={"Надіслати код"}
+                          label={i18n.t('send_code')}
                           forgot={values.email}
                           onPress={() => values.email && this.exitScreen(values)}
                           disabled={errors.email || !values.email}

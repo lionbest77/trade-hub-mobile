@@ -20,6 +20,8 @@ import {CategoryCard} from '../CategoryCard/CategoryCard';
 import CheckAudioAttachment from "../../CheckAttachment/CheckAudioAttachment/CheckAudioAttachment.js";
 import {dateTimeToString} from '../../../services/formatService';
 
+import i18n from '../../../services/localization'
+
 const Content = props => {
   const {
     documents_delivery_address,
@@ -92,7 +94,7 @@ const Content = props => {
     try {
      await sound.loadAsync(uri, {}, true );
    } catch (e) {
-      Alert.alert("Помилка при завантаженні аудіо", `${e}`, [{ text: "OK" }]);
+      Alert.alert(i18n.t('load_audio_error'), `${e}`, [{ text: i18n.t('ok') }]);
    }
 };
 
@@ -120,64 +122,64 @@ const Content = props => {
           )
       )}
     setGoods(categoryArray);
-     }, []);
+    }, []);
 
 
   return (
       <View style={{ ...props.addStyle, flex: 1 }}>
         <ScrollView ref={ref} showsVerticalScrollIndicator={false}>
           <View style={styles.contentContainer}>
-            <Text style={styles.mainContentLabel}>Опис</Text>
-            <Text style={styles.descLabel}>Назва</Text>
+            <Text style={styles.mainContentLabel}>{i18n.t('description')}</Text>
+            <Text style={styles.descLabel}>{i18n.t('title')}</Text>
             <Text style={styles.title}>{name}</Text>
-            <Text style={styles.descLabel}>Опис</Text>
+            <Text style={styles.descLabel}>{i18n.t('description')}</Text>
             <Text style={styles.title}>{description}</Text>
             <View style={styles.details}>
-              <Text style={styles.descLabel}>Вид замовлення</Text>
-              <Text style={styles.title}>Закупівля</Text>
+              <Text style={styles.descLabel}>{i18n.t('order_type')}</Text>
+              <Text style={styles.title}>{i18n.t('purchase')}</Text>
 
               <View style={styles.categoryContainer}>
                 <View style={{width: '70%'}}>
-                  <Text style={styles.descLabel}>Найменування товару </Text>
+                  <Text style={styles.descLabel}>{i18n.t('goods_name')}</Text>
                 </View>
                 <View style={{width: '29%', alignItems: 'flex-end'}}>
-                  <Text style={styles.descLabel}>Кількість</Text>
+                  <Text style={styles.descLabel}>{i18n.t('quantity')}</Text>
                 </View>
-               </View>
+              </View>
               {!previousState &&
               <View style={{paddingVertical: '2%'}}>
-               {goods}
+                {goods}
               </View>
               }
               <View style={styles.dateContainer}>
                 <View style={styles.dateSubContainer}>
-                  <Text style={styles.descLabel}>Дата початку</Text>
+                  <Text style={styles.descLabel}>{i18n.t('start_date')}</Text>
                   <Text style={styles.title}>{fullDataStart && `${fullDataStart.day}.${fullDataStart.month}.${fullDataStart.year}`} </Text>
                 </View>
 
                 <View style={{...styles.dateSubContainer, alignItems: 'flex-end'}}>
-                  <Text style={styles.descLabel}>Дата завершення</Text>
+                  <Text style={styles.descLabel}>{i18n.t('completion_date')}</Text>
                   <Text style={styles.title}>{fullDataEnd && `${fullDataEnd.day}.${fullDataEnd.month}.${fullDataEnd.year}`}</Text>
                 </View>
               </View>
 
               <View style={styles.dateContainer}>
                 <View style={styles.dateSubContainer}>
-                  <Text style={styles.descLabel}>Час закінчення торгів</Text>
+                  <Text style={styles.descLabel}>{i18n.t('bidding_end_time')}</Text>
                   <Text style={styles.title}>{dateTimeToString(bargain_end_date)}</Text>
                 </View>
               </View>
-              <Text style={styles.descLabel}>Адреса доставки документів:</Text>
+              <Text style={styles.descLabel}>{i18n.t('docs_delivery_address')}: </Text>
               <Text style={styles.title}>{documents_delivery_address}</Text>
-              <Text style={styles.descLabel}>Адреса доставки товарів:</Text>
+              <Text style={styles.descLabel}>{i18n.t('gods_delivery_address')}: </Text>
               <Text style={styles.title}>{goods_delivery_address}</Text>
-              <Text style={styles.descLabel}>Додаткові умови</Text>
+              <Text style={styles.descLabel}>{i18n.t('additional_conditions')}</Text>
               <Text style={styles.title}>{additional_conditions}</Text>
             </View>
 
             <View style={styles.filesContainer}>
               <Text style={styles.descLabel}>
-                Вкладені файли
+                {i18n.t('attached_files')}
               </Text>
 
               {files.map((item, index) => (
@@ -256,7 +258,7 @@ const Content = props => {
                 containerLeft={true}
                 icon={<CheckMarkIcon />}
                 width={"100%"}
-                label={"Все вірно!"}
+                label={i18n.t('everything_correct')}
                 onPress={() => exitScreen()}
                 color={"#fff"}
             />
@@ -268,7 +270,7 @@ const Content = props => {
           >
             <View style={{ alignItems: "center", marginBottom: '5%' }}>
               <Text style={styles.tenderTooltip}>
-                { previousState ? `Актуальний вигляд заявки`  : `Початковий вигляд заявки`  }
+                { previousState ? i18n.t('initial_form_app')  : i18n.t('current_form_app')  }
               </Text>
             </View>
           </TouchableOpacity>

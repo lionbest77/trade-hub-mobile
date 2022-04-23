@@ -87,7 +87,7 @@ const TenderCard = (props) => {
             <Text style={styles.date}>
               {fullData.day}.{fullData.month}.{fullData.year} {fullData.hour}:{fullData.minutes}
             </Text>
-            <Text style={styles.orderNumber}>Заявка № {internal_id}</Text>
+            <Text style={styles.orderNumber}>{i18n.t('order')} №{internal_id}</Text>
           </View>
         </View>
       </View>
@@ -96,7 +96,7 @@ const TenderCard = (props) => {
         <Text style={styles.textTitle}>{name}</Text>
       </View>
 
-      <Text style={styles.descriptionLabel}>Опис</Text>
+      <Text style={styles.descriptionLabel}>{i18n.t('description')}</Text>
 
       <View style={styles.filesContainer}>
         <View style={styles.file}>
@@ -110,9 +110,6 @@ const TenderCard = (props) => {
       </View>
 
       <View style={styles.tenderDescriptionContainer}>
-
-        <Text>{i18n.t('welcome')}</Text>
-
         <Text
           style={styles.tenderDescription}
           numberOfLines={5}
@@ -127,7 +124,7 @@ const TenderCard = (props) => {
           <MainButton
             icon={<ChatIcon />}
             width={"100%"}
-            label={"Чат"}
+            label={i18n.t('chat')}
             backgroundColor={"#fff"}
             leftBorderNone={true}
             containerLeftChat={true}
@@ -150,7 +147,7 @@ const TenderCard = (props) => {
             backgroundColor={"#fff"}
             rightBorderNone={true}
             width={"100%"}
-            label={"Детальніше"}
+            label={i18n.t('read_more')}
             containerRight={true}
             onPress={() =>props.navigation.navigate("TenderDetails", { _id, tender, from: 'Main' })}
           />

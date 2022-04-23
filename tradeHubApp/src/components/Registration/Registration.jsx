@@ -18,6 +18,7 @@ import validationSchema from "./Validation.js";
 import { DEFAULT_URL } from "../../constants/Req.js";
 import { styles } from "./Styles";
 import COLORS from '../../constants/Colors';
+import i18n from "../../services/localization";
 
 let { width } = Dimensions.get("window");
 
@@ -93,12 +94,12 @@ class Registration extends Component {
       .catch(err => {
         this.setState({ error: true, spinner: false });
         if(err?.response?.data?.statusCode === 500){
-              Alert.alert("Вибачте, технічна помилка", "Перевірте введені дані.", [
-                { text: "OK" }
+              Alert.alert(i18n.t('tech_error'), i18n.t('check_inputed_data'), [
+                { text: i18n.t('ok') }
               ]);
         } else {
-          Alert.alert("Помилка реєстрації!", `${err?.response?.data?.message || 'Щось пішло не так, перевірте введені дані'}`, [
-            { text: "OK" }
+          Alert.alert(i18n.t('reg_error'), `${err?.response?.data?.message || i18n.t('something_went_wrong_check_data')}`, [
+            { text: i18n.t('ok') }
           ]);
         }
       });
@@ -164,11 +165,11 @@ class Registration extends Component {
             onBackdropPress={this.closeOverlay}
           >
             <>
-          <Text style={styles.text}>Ви додали максимальну кількість співробітників</Text>
+          <Text style={styles.text}>{i18n.t('added_max_employees')}</Text>
             <View style={styles.buttonsContainer}>
               <View><MainButton
                   width={100}
-                  label={"Добре"}
+                  label={i18n.t('ok')}
                   onPress={this.closeOverlay}
                 /></View>
             </View>
@@ -177,7 +178,7 @@ class Registration extends Component {
           <View style={{ width: "100%" }}>
             <SecondaryButton
               icon={<GoogleIcon />}
-              text={"Через Google акаунт"}
+              text={i18n.t('auth_google')}
               onPress={this.props.googleSignIn}
             />
             <Delimiter />
@@ -205,7 +206,7 @@ class Registration extends Component {
               errors
             }) => (
                 <View style={styles.formContainer}>
-                  <Text style={styles.registrationInputLabel}>ПІБ</Text>
+                  <Text style={styles.registrationInputLabel}>{i18n.t('PIB')}</Text>
                   <TextInput
                     style={styles.registrationInput}
                     name="full_name"
@@ -214,7 +215,7 @@ class Registration extends Component {
                     // autoCapitalize={'words'}
                   />
                   <Text style={styles.errorsStyle}>{errors.full_name}</Text>
-                  <Text style={styles.registrationInputLabel}>Email</Text>
+                  <Text style={styles.registrationInputLabel}>{i18n.t('email')}</Text>
                   <TextInput
                     name="email"
                     onChangeText={handleChange("email")}
@@ -225,8 +226,8 @@ class Registration extends Component {
                   />
                   <Text style={styles.errorsStyle}>{errors.email}</Text>
                   <Text style={styles.registrationInputLabel}>
-                    Назва організації
-              </Text>
+                    {i18n.t('company_name')}
+                  </Text>
                   <TextInput
                     name="companyName"
                     onBlur={handleBlur("companyName")}
@@ -272,7 +273,7 @@ class Registration extends Component {
                             <MainButton
                               smallFontSize={width >= 600 ? 22 : 18}
                               height={width >= 600 ? 70 : 60}
-                              label={"Зареєструватись"}
+                              label={i18n.t('do_register')}
                               onPress={() =>
                                 Object.keys(errors).length === 0 &&
                                 errors.constructor === Object &&

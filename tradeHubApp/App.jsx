@@ -10,6 +10,8 @@ import AppContainer from "./src/navigation/navigation";
 import AppContainer3 from './src/navigation/navigation3';
 import store from './src/store/store';
 
+import i18n from './src/services/localization'
+
 const App = (props) => {
 
   // const Spacer = Platform.OS === 'ios' ? <KeyboardSpacer /> : null
@@ -39,7 +41,7 @@ const App = (props) => {
     getIsLoginStatus().then(r => r);
   }catch (e) {
     Alert.alert("App", `${e.response.data}`, [
-      { text: "OK" }
+      { text: i18n.t('ok') }
     ]);
   }
 
@@ -48,8 +50,8 @@ const App = (props) => {
   useEffect(() => {
     NetInfo.addEventListener(state => {
       if (!state.isConnected && isConnected) {
-        Alert.alert("Технічна помилка!", "Перевірте доступність інтернет-зв'язку.", [
-          { text: "OK" }
+        Alert.alert(i18n.t('tech_error'), i18n.t('check_internet'), [
+          { text: i18n.t('ok') }
         ]);
 
         setIsConnected(false);

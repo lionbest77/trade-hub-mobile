@@ -16,6 +16,8 @@ import { styles } from "../Registration/Styles";
 import MainHeader from "../headers/MainHeader/MainHeader";
 import MainButton from "../buttons/MainButton/MainButton";
 
+import i18n from '../../services/localization'
+
 let { width } = Dimensions.get("window");
 
 class RegistrationAfterGoogle extends Component {
@@ -91,8 +93,8 @@ class RegistrationAfterGoogle extends Component {
     .catch(res => {
       this.setState({ error: true, spinner: false });
       console.log(res, "<===== ERR REGISTRATION");
-      Alert.alert("Помилка регістрації!", `${res.response.data.message}`, [
-        { text: "OK" },
+      Alert.alert(i18n.t('reg_error'), `${res.response.data.message}`, [
+        { text: i18n.t('ok') },
       ]);
     });
   };
@@ -110,7 +112,7 @@ class RegistrationAfterGoogle extends Component {
                 companyName: user.companyName,
                 role: user.pickedData.value,
                 fullName: user.full_name
-             }
+              }
       ));
     } else  {
       this.setState(prev => ({
@@ -143,8 +145,8 @@ class RegistrationAfterGoogle extends Component {
       }
       else {
         if (this.state.exists) {
-          Alert.alert("Помилка реєстрації!", "Користувач з такими даними вже існує ", [
-            {text: "OK"}]);
+          Alert.alert(i18n.t('reg_error'), i18n.t('not_have_user_by_data'), [
+            {text: i18n.t('ok') }]);
         }
         // else {
         //   Alert.alert("Вибачте, технична помилка",
@@ -182,13 +184,13 @@ class RegistrationAfterGoogle extends Component {
               onBackdropPress={this.closeOverlay}
           >
             <Text style={styles.text}>
-              Ви додали максимальну кількість співробітників
+              {i18n.t('added_max_employees')}
             </Text>
             <View style={styles.buttonsContainer}>
               <View>
                 <MainButton
                     width={100}
-                    label={"Добре"}
+                    label={i18n.t('ok')}
                     onPress={this.closeOverlay}
                 />
               </View>
@@ -226,7 +228,7 @@ class RegistrationAfterGoogle extends Component {
                     errors
                   }) => (
                     <View style={styles.formContainer}>
-                      <Text style={styles.registrationInputLabel}>ПІБ</Text>
+                      <Text style={styles.registrationInputLabel}>{i18n.t('PIB')}</Text>
                       <TextInput
                           style={styles.registrationInput}
                           name="full_name"
@@ -237,7 +239,7 @@ class RegistrationAfterGoogle extends Component {
                       />
                       <Text style={styles.errorsStyle}>{errors.full_name}</Text>
                       <Text style={styles.registrationInputLabel}>
-                        Назва організації
+                        {i18n.t('company_name')}
                       </Text>
                       <TextInput
                           name="companyName"
@@ -279,7 +281,7 @@ class RegistrationAfterGoogle extends Component {
                             <MainButton
                                 smallFontSize={width >= 600 ? 22 : 18}
                                 height={width >= 600 ? 70 : 60}
-                                label={"Зареєструватись"}
+                                label={i18n.t('do_register')}
                                 onPress={() =>
                                     values.full_name &&
                                     values.companyName &&

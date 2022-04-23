@@ -17,6 +17,8 @@ import MainButton from "../../components/buttons/MainButton/MainButton";
 import InformText from "../../ui/InformText/InformText";
 import ArrowLeftIcon from "../../ui/icons/ArrowLeftIcon";
 
+import i18n from '../../services/localization'
+
 const ConfirmPassword = props => {
 
   const [error, setError] = useState();
@@ -54,7 +56,7 @@ const ConfirmPassword = props => {
         // console.log(res.data, "<========== RES after confirm password");
         if (res.data.success === false) {
           setWarning(
-              "Введений Вами пароль не задовольняє правилам безпеки."
+              i18n.t('inputed_pass_lost_security')
           );
         } else {
           setActiveOverlay(true);
@@ -63,7 +65,7 @@ const ConfirmPassword = props => {
       .catch(error => {
         setError(true);
         // console.log(error.response.data, "<<<===== ERR REGISTRATION");
-        setWarning('Введений Вами пароль не задовольняє правилам безпеки')
+        setWarning(i18n.t('inputed_pass_lost_security'))
       });
       await  setIsLoading(false);
   };
@@ -77,13 +79,11 @@ const ConfirmPassword = props => {
       >
         {registration ? (
           <Text style={styles.text}>
-            Дякуємо, ми прийняли Вашу заявку. Ми повідомимо Вас по email, коли заявка
-            буде оброблена.
+            {i18n.t('accepted_app')}
           </Text>
         ) : (
           <Text style={styles.text}>
-            Пароль змінено. Будь ласка, авторизуйтеся, використовуючи Ваш новий
-            пароль
+            {i18n.t('pass_changed')}
           </Text>
         )}
 
@@ -91,7 +91,7 @@ const ConfirmPassword = props => {
           <View>
             <MainButton
               width={100}
-              label={"Добре"}
+              label={i18n.t('ok')}
               onPress={() => {
                 closeOverlay;
                 props.navigation.navigate("Login");
@@ -134,18 +134,16 @@ const ConfirmPassword = props => {
                   {registration ? (
                     <>
                       <InformText>
-                        Створіть пароль до акаунта, який повинен містити латинські
-                        букви, інші символи та хоча б 1 цифру.
+                        {i18n.t('create_pass_to_accout')}
                       </InformText>
-                      <InformText>Пароль не може містити пробіли.</InformText>
+                      <InformText>{i18n.t('pass_cant_contain_spaces')}</InformText>
                     </>
                   ) : (
                     <>
                       <InformText>
-                        Створіть новий пароль до акаунта, який повинен містити латинські
-                        букви, інші символи та хоча б 1 цифру.
+                      {i18n.t('create_pass_to_accout')}
                       </InformText>
-                      <InformText>Пароль не може містити пробіли.</InformText>
+                      <InformText>{i18n.t('pass_cant_contain_spaces')}</InformText>
                     </>
                   )}
                 </View>
@@ -153,7 +151,7 @@ const ConfirmPassword = props => {
                 <InputForm
                   name="password"
                   secur={true}
-                  label="Пароль"
+                  label={i18n.t('password')}
                   iconVisible={
                     <Ionicons name="md-eye" size={30} color="#C2C2C2" />
                   }
@@ -169,7 +167,7 @@ const ConfirmPassword = props => {
                 <InputForm
                   name="confirmPassword"
                   secur={true}
-                  label="Повторіть пароль"
+                  label={i18n.t('repeat_password')}
                   iconVisible={
                     <Ionicons name="md-eye" size={30} color="#C2C2C2" />
                   }
@@ -193,7 +191,7 @@ const ConfirmPassword = props => {
                             </View>
                             ) : (
                                 <MainButton
-                                    label={"Зареєструватися"}
+                                    label={i18n.t('do_register')}
                                     onPress={() =>
                                         Object.keys(errors).length === 0 &&
                                         errors.constructor === Object &&
@@ -216,7 +214,7 @@ const ConfirmPassword = props => {
                           </View>
                       ) : (
                               <MainButton
-                                  label={"Створити"}
+                                  label={i18n.t('create')}
                                   onPress={() =>
                                       Object.keys(errors).length === 0 &&
                                       errors.constructor === Object &&

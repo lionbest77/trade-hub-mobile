@@ -27,6 +27,8 @@ import InputForm from "../InputForm/InputForm/InputForm";
 import SecondaryButton from "../buttons/SecondaryButton/SecondaryButton";
 import ForgotPasswordButton from "../buttons/ForgotPasswordButton/ForgotPasswordButton";
 
+import i18n from '../../services/localization'
+
 const Authorization = (props) => {
   let { width } = Dimensions.get("window");
 
@@ -38,8 +40,8 @@ const Authorization = (props) => {
   const [warningPassword, setWarningPassword] = useState(null);
   const [privacyAgreement, setPrivacyAgreement] = useState();
 
-  const errorMessageEmail = "Email невірний";
-  const errorMessagePassword = "Пароль має бути не меньш ніж 8 символів";
+  const errorMessageEmail = i18n.t('email_incorrect');
+  const errorMessagePassword = i18n.t('pass_must_8_chartrs_long');
 
   const getPrivacyAgreement = async () => {
     setPrivacyAgreement(await AsyncStorage.getItem("tradeHubPrivacyAgreement"));
@@ -121,8 +123,8 @@ const Authorization = (props) => {
         }
       })
       .catch((error) => {
-        Alert.alert("Помилка авторизації!", `${error?.response?.data?.message || 'Щось пішло не так!'}`, [
-          { text: "OK" },
+        Alert.alert(i18n.t('auth_error'), `${error?.response?.data?.message || i18n.t('something_went_wrong')}`, [
+          { text: i18n.t('ok') },
         ]);
       })
       .finally(() => setIsLoading(false));
@@ -143,9 +145,9 @@ const Authorization = (props) => {
 
   const privacyRequire = () => {
     Alert.alert(
-      "Помилка авторизації!",
-      "Для авторизації ознайомтесь, будь ласка, із політикою конфіденційності",
-      [{ text: "OK" }]
+      i18n.t('auth_error'),
+      i18n.t('for_auth_read_privacy_policy'),
+      [{ text: i18n.t('ok') }]
     );
   };
 
@@ -154,7 +156,7 @@ const Authorization = (props) => {
     try {
       getPrivacyAgreement().then(r => r);
     } catch (e) {
-      Alert.alert("Authorization", `${e.response.data}`, [{ text: "OK" }]);
+      Alert.alert("Authorization", `${e.response.data}`, [{ text: i18n.t('ok') }]);
     }
     return () => {
      abortController.abort();
@@ -174,7 +176,7 @@ const Authorization = (props) => {
               privacyAgreement || check ? props.googleSignIn : privacyRequire
             }
             icon={<GoogleIcon />}
-            text={"Через Google акаунт"}
+            text={i18n.t('auth_google')}
           />
           <Delimiter style={{ marginVertical: 150 }} />
         </View>
@@ -198,7 +200,7 @@ const Authorization = (props) => {
           <View>
             <InputForm
               secur={true}
-              label="Пароль"
+              label={i18n.t('password')}
               warning={warningPassword}
               value={valuePassword}
               iconVisible={<Ionicons name="md-eye" size={30} color="#C2C2C2" />}
@@ -233,7 +235,7 @@ const Authorization = (props) => {
               >
                 <Text style={styles.policyText}>
                   {" "}
-                  Політика конфіденційності
+                  {i18n.t('privacy_policy')}
                 </Text>
               </TouchableOpacity>
             </View>
@@ -263,7 +265,7 @@ const Authorization = (props) => {
                 smallFontSize={width >= 600 ? 22 : 18}
                 height={width >= 600 ? 70 : 60}
                 width={"100%"}
-                label={"Увійти"}
+                label={i18n.t('log_in')}
                 onPress={() =>
                   (privacyAgreement || check) &&
                   valueEmail &&

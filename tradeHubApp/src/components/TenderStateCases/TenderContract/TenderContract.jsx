@@ -28,6 +28,8 @@ import { downloadHelper } from "../../../helpers/download/downloadHelper.js";
 import CrossIcon from '../../../ui/icons/CrossIcon';
 import CheckMarkIcon from '../../../ui/icons/CheckMarkIcon';
 
+import i18n from '../../../services/localization'
+
 const TenderContract = ({ initActiveState = false, ...props }) => {
   const [error, setError] = useState(false);
   const [active, setActive] = useState(initActiveState);
@@ -64,7 +66,7 @@ const TenderContract = ({ initActiveState = false, ...props }) => {
   const shared = async url => {
     await Share.share({
       url: url,
-      message: "Надіслати посилання на договір: " + url
+      message: i18n.t('send_contract_link') + url
     });
   };
 
@@ -113,7 +115,7 @@ const TenderContract = ({ initActiveState = false, ...props }) => {
       setSpinner(false);
     }catch (e) {
       Alert.alert("Tender Contract", `${e.response.data}`, [
-        { text: "OK" }
+        { text: i18n.t('ok') }
       ]);
     }
 
@@ -176,11 +178,11 @@ const TenderContract = ({ initActiveState = false, ...props }) => {
                           </View>
                           <View style={styles.shareButton}>
                           <MainButton
-                      backgroundColor="#fff"
-                      icon={<ShareIcon />}
-                      onPress={() => shared(`${DEFAULT_URL}${item.path}`)}
-                      />
-                    </View>
+                            backgroundColor="#fff"
+                            icon={<ShareIcon />}
+                            onPress={() => shared(`${DEFAULT_URL}${item.path}`)}
+                            />
+                        </View>
                     </View>
                       )
                     }
@@ -198,7 +200,7 @@ const TenderContract = ({ initActiveState = false, ...props }) => {
                     }
                     rightComponent={
                       <View style={{ flexDirection: "row" }}>
-                        <Text style={styles.text}>Додати документ</Text>
+                        <Text style={styles.text}>{i18n.t('add_doc')}</Text>
                       </View>
                     }
                 />
@@ -215,7 +217,7 @@ const TenderContract = ({ initActiveState = false, ...props }) => {
                     </View>
                   }
                   rightComponent={
-                    <Text style={styles.text}> Надіслати по email</Text>
+                    <Text style={styles.text}>{i18n.t('send_to_email')}</Text>
                   }
               />
             </View>
@@ -228,7 +230,7 @@ const TenderContract = ({ initActiveState = false, ...props }) => {
           onBackdropPress={() => setIsOpenOverlay(false)}
       >
         <Text style={styles.text1}>
-          Обраний файл  "{document.name && document.name }" буде надіслано менеджеру.
+          {i18n.t('file_will_send_p1')} "{document.name && document.name }" {i18n.t('file_will_send_p2')}
         </Text>
         <View style={styles.buttonsContainer1}>
           <View>
@@ -256,7 +258,7 @@ const TenderContract = ({ initActiveState = false, ...props }) => {
           onBackdropPress={() => setIsOpenOverlay(false)}
       >
         <Text style={styles.text1}>
-         Надіслати договір на Вашу email адресу ?
+          {i18n.t('send_contract_to_email')}
         </Text>
         <View style={styles.buttonsContainer1}>
           <View>

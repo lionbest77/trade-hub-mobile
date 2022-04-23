@@ -9,18 +9,20 @@ import NextIcon from "../../ui/icons/NextIcon";
 import { styles } from "./styles";
 import CheckMarkIcon from "../../ui/icons/CheckMarkIcon";
 
+import i18n from '../../services/localization'
+
 const content = [
   {
     image: require("../../assets/images/OnboardingImg1.png"),
-    text: "Делегування закупок"
+    text: i18n.t('procurement_delegation')
   },
   {
     image: require("../../assets/images/OnboardingImg2.png"),
-    text: "Економія коштів"
+    text: i18n.t('save_money')
   },
   {
     image: require("../../assets/images/OnboardingImg3.png"),
-    text: "Автоматизація процесів"
+    text: i18n.t('process_automation')
   }
 ];
 
@@ -66,7 +68,7 @@ const OnboardingScreen = props => {
                   paddingBottom: 4,
                 }}
               >
-                Далі
+                {i18n.t('next')}
               </Text>
             }
             rightComponent={<NextIcon />}
@@ -95,7 +97,7 @@ const OnboardingScreen = props => {
                   paddingHorizontal: '10%'
                 }}
               >
-                До реєстрації
+                {i18n.t('to_register')}
               </Text>
             }
             leftComponent={

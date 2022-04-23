@@ -8,6 +8,8 @@ import Swipeable from 'react-native-swipeable';
 import {styles} from './style'
 import DeleteIcon from '../../ui/icons/DeleteIcon';
 
+import i18n from '../../services/localization'
+
 export const NotificationCard =({
                                   item,
                                   index,
@@ -96,7 +98,7 @@ export const NotificationCard =({
               >
                 {internal_id && <Text
                     style={!read ? styles.rowTenderText : styles.rowTenderTextRead}>
-                  {`Заявка №${internal_id}`}</Text>}
+                  {`${i18n.t('order')} №${internal_id}`}</Text>}
 
                 <Text
                     style={styles.rowDateText}>{fullData.day}.{fullData.month}.{fullData.year} {fullData.hour}:{fullData.minutes}</Text>

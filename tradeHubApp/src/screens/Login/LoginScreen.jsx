@@ -16,6 +16,8 @@ import Authorization from "../../components/Authorization/Authorization";
 import RegistrationAfterGoogle from "../../components/RegistrationAfterGoogle/RegistrationAfterGoogle";
 import { registerForPushNotificationsAsync } from "../../services/PushNotifications";
 
+import i18n from '../../services/localization'
+
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
     shouldShowAlert: true,
@@ -70,8 +72,8 @@ const LoginScreen = props => {
         }));
         props.navigation.navigate("Main");
       } else {
-        Alert.alert("Помилка авторизації!", `${res.message}`, [
-          { text: "OK" },
+        Alert.alert(i18n.t('auth_error'), `${res.message}`, [
+          { text: i18n.t('ok') },
         ]);
       }
     })
@@ -129,7 +131,7 @@ const LoginScreen = props => {
       element: () => (
         <Tab
           buttonIndex={0}
-          label={"Реєстрація"}
+          label={i18n.t('register')}
           selectedIndex={props.screenNumber}
         />
       )
@@ -138,7 +140,7 @@ const LoginScreen = props => {
       element: () => (
         <Tab
           buttonIndex={1}
-          label={"Авторизація"}
+          label={i18n.t('auth')}
           selectedIndex={props.screenNumber}
           alignmentRight
         />
@@ -151,7 +153,7 @@ const LoginScreen = props => {
       .then(expoPushToken => setTokenExpo(expoPushToken))
       .catch(err => {
         Alert.alert("Login", `${err.response.data}`, [
-          { text: "OK" }
+          { text: i18n.t('ok') }
         ]);
       });
 

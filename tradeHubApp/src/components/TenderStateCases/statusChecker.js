@@ -1,19 +1,21 @@
+import i18n from '../../services/localization'
+
 const statusChecker = status => {
   switch (status) {
     case 0:
-      return "Новий. Очікує обробки";
+      return i18n.t('new_processing');
     case 3:
-      return "Вибір постачальника";
+      return i18n.t('choice_supplier');
     case 1:
-      return "Вимагає підтвердження";
+      return i18n.t('requires_confirm');
     case 4:
-      return "Документи";
+      return i18n.t('docs');
     case 5:
-      return "Доставка очікується";
+      return i18n.t('delivery_expected');
     case 2:
-      return "Підтверджений";
+      return i18n.t('confirmed');
     case 6:
-      return "Доставка успішна";
+      return i18n.t('delivery_success');
     default:
       break;
   }

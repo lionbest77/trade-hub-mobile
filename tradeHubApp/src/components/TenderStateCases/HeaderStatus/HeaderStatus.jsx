@@ -6,6 +6,8 @@ import ProgressBar from "../../ProgressBar/ProgressBar";
 import statusChecker from "../statusChecker.js";
 import colorByStatus from "../colorByStatus.js";
 
+import i18n from '../../../services/localization'
+
 const HeaderStatus = (props) => {
   const {
     status_code,
@@ -64,7 +66,7 @@ const HeaderStatus = (props) => {
             {fullData.day}.{fullData.month}.{fullData.year} {fullData.hour} :{" "}
             {fullData.minutes}
           </Text>
-          <Text style={styles.orderNumber}>Замовлення № {internal_id}</Text>
+          <Text style={styles.orderNumber}>{i18n.t('order')} №{internal_id}</Text>
         </View>
       </View>
     </View>

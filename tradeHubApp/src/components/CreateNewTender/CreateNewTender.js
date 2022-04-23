@@ -42,6 +42,8 @@ import AddItemFromCatalog from './AddItemFromCatalog/AddItemFromCatalog';
 import DeleteItemIcon from '../../ui/icons/DeleteItemIcon';
 import {dateTimeToString} from '../../services/formatService';
 
+import i18n from '../../services/localization'
+
 const CreateNewTender = ({
     uri,
     sound,
@@ -244,10 +246,10 @@ const CreateNewTender = ({
       };
 
       const addItem = itemData => {
-        console.log('========= Add item =======');
-        console.log('------ items --------');
-        console.log(items);
-        console.log('------ /items --------');
+        // console.log('========= Add item =======');
+        // console.log('------ items --------');
+        // console.log(items);
+        // console.log('------ /items --------');
         setItems([...items, itemData]);
       };
 
@@ -257,13 +259,13 @@ const CreateNewTender = ({
         setItems([...tenderItems]);
       };
 
-      const removeItemQuery = (index, name) => Alert.alert('Попередження',
-          `Товар "${name}" буде видалений з заявки. Продовжити?`, [
+      const removeItemQuery = (index, name) => Alert.alert(i18n.t('warning'),
+          `${i18n.t('product_will_delete_p1')} "${name}" ${i18n.t('product_will_delete_p2')}`, [
             {
-              text: 'Ні',
+              text: i18n.t('no'),
               style: 'cancel',
             },
-            {text: 'Так', onPress: () => removeItem(index)},
+            {text: i18n.t('yes'), onPress: () => removeItem(index)},
           ], {
             cancelable: true,
           });
@@ -276,7 +278,6 @@ const CreateNewTender = ({
       }, []);
 
       return (
-
           <KeyboardAvoidingView
               style={{width: '100%'}}
               behavior={Platform.OS === 'ios' ? 'padding' : null} enabled>
@@ -356,13 +357,13 @@ const CreateNewTender = ({
                                       userToken={userData.token}
                   />
                   <View style={styles.title}>
-                    <PageTitle text={'Створення заявки'}/>
+                    <PageTitle text={i18n.t('create_application')}/>
                   </View>
 
                   <View style={styles.inputsContainer}>
                     <InputForm
                         defaultValue=""
-                        label={`Назва`}
+                        label={i18n.t('title')}
                         required={true}
                         security={false}
                         selectTextOnFocus={true}
@@ -370,7 +371,7 @@ const CreateNewTender = ({
                     />
 
                     <TextArea
-                        text={'Опис'}
+                        text={i18n.t('description')}
                         description={tender.description}
                         setCopiedText={handlerPasteCopiedText}
                         setValue={value => handlerTenderNameDescription(value)}
@@ -400,7 +401,7 @@ const CreateNewTender = ({
                           width={'100%'}
                           height={40}
                           onPress={() => setShowCatalog(true)}
-                          label={'Додати з каталогу'}
+                          label={i18n.t('add_from_catalog')}
                       />
                     </View>
 
@@ -408,7 +409,7 @@ const CreateNewTender = ({
                         security={false}
                         required={false}
                         selectTextOnFocus={true}
-                        label={'Адреса доставки товарів'}
+                        label={i18n.t('delivery_address')}
                         value={tender.goods_delivery_address}
                         onChangeText={value => handlerAddress(value)}
                     />
@@ -444,7 +445,7 @@ const CreateNewTender = ({
                                     required={true}
                                     editable={false}
                                     security={false}
-                                    label={'Дата початку'}
+                                    label={i18n.t('start_date')}
                                     selectTextOnFocus={true}
                                     onTouchStart={() => setActiveDateStart(true)}
                                     value={`${fullDataStart.day}.${fullDataStart.month}.${fullDataStart.year}`}
@@ -460,7 +461,7 @@ const CreateNewTender = ({
                                     selectTextOnFocus={true}
                                     security={false}
                                     value={`${fullDataEnd.day}.${fullDataEnd.month}.${fullDataEnd.year}`}
-                                    label={'Дата завершення'}
+                                    label={i18n.t('completion_date')}
                                     required={true}
                                     editable={false}
                                 />
@@ -476,7 +477,7 @@ const CreateNewTender = ({
                                   selectTextOnFocus={true}
                                   security={false}
                                   value={dateTimeToString(tender.bargain_end_date)}
-                                  label={'Час закінчення торгів'}
+                                  label={i18n.t('bidding_end_time')}
                                   required={true}
                                   editable={false}
                               />
@@ -485,7 +486,7 @@ const CreateNewTender = ({
                         </>
                     )}
 
-                    <Text style={styles.text}>Вкладені файли</Text>
+                  <Text style={styles.text}>{i18n.t('attached_files')}</Text>
 
                   </View>
                   <View style={styles.mainContainer}>

@@ -16,6 +16,8 @@ import deliveryCarImage from '../../assets/images/deliveryCar.png';
 import { ProgressBarAndroidComponent } from 'react-native';
 // import BlackCheckMarkIcon from '../../assets/images/checkMark.png'; 
 
+import i18n from '../../services/localization'
+
 const ContractorCard = props => {
   const {
     sum,
@@ -47,8 +49,8 @@ const ContractorCard = props => {
   const setActiveOverlay = props.setActiveOverlay;
   const setActiveOverlayDel = props.setActiveOverlayDel;
 
-  const text = (isApprove && isApprove === true) ? `Підтверждено` : `Відхилено`;
-  const productStatusText = props.item.sent ? (props.item.received ? 'Отримано' : 'У дорозі') : 'Очікується';
+  const text = (isApprove && isApprove === true) ? i18n.t('confirmed') : i18n.t('rejected');
+  const productStatusText = props.item.sent ? (props.item.received ? i18n.t('received') : i18n.t('in_transit')) : i18n.t('expected');
   const textColor = (isApprove && isApprove === true) ?
       COLORS.good :
       COLORS.main;
@@ -67,7 +69,7 @@ const ContractorCard = props => {
   };
 
   const alertShow = () => {
-    Alert.alert('Недостатньо прав', 'на виконання даних дій', [{text: 'OK'}]);
+    Alert.alert(i18n.t('not_enough_rights_short'), i18n.t('perform_actions'), [{text: i18n.t('ok')}]);
   };
 
   const deliveryAccepted = async idd => {
@@ -90,7 +92,7 @@ const ContractorCard = props => {
       .then(res => {
           // setIsApprove(!isApprove);
           console.log('Success updated');
-          console.log(res);
+          //console.log(res);
         },
       )
         .catch(err => console.log(err));
@@ -249,27 +251,27 @@ const ContractorCard = props => {
       </View>)} */}
     </View>
     <View style={{marginTop: 6}}>
-      <Text style={styles.desc}>Найменування товару</Text>
+      <Text style={styles.desc}>{i18n.t('goods_name')}</Text>
       <Text style={styles.val}>{goodsName}</Text>
     </View>
 
     <View style={{marginTop: 6}}>
-      <Text style={styles.desc}>Опис</Text>
+      <Text style={styles.desc}>{i18n.t('description')}</Text>
       <Text style={styles.val}>{description}</Text>
     </View>
 
     <View style={{marginTop: 6}}>
-      <Text style={styles.desc}>Товар постачальника</Text>
+      <Text style={styles.desc}>{i18n.t('supplier_item')}</Text>
       <Text style={styles.val}>{supplierItem}</Text>
     </View>
 
     <View style={{marginTop: 6}}>
-      <Text style={styles.desc}>Кометар постачальника</Text>
+      <Text style={styles.desc}>{i18n.t('supplier_comment')}</Text>
       <Text style={styles.val}>{supplierComment}</Text>
     </View>
 
     <View style={{marginTop: 6}}>
-      <Text style={styles.desc}>Ціна</Text>
+      <Text style={styles.desc}>{i18n.t('price')}</Text>
       <Text style={styles.val}>
         {supplierPrice ? supplierPrice : price}
         {currency}
@@ -283,7 +285,7 @@ const ContractorCard = props => {
           }}
       >
         <View style={{marginTop: 3}}>
-          <Text style={styles.desc}>Кількість</Text>
+          <Text style={styles.desc}>{i18n.t('quantity')}</Text>
           <Text style={styles.val}>{measureUnit ?
               `${amount} ${measureUnit}` :
               `${amount}`}</Text>
@@ -308,20 +310,15 @@ const ContractorCard = props => {
         </View>)}
       </View>
       <View style={{marginTop: 3}}>
-        <Text style={styles.desc}>Сума</Text>
+        <Text style={styles.desc}>{i18n.t('sum')}</Text>
         <Text style={styles.val}>{sum} {currency}</Text>
       </View>
-      <Text style={styles.desc}>Примітка</Text>
+      <Text style={styles.desc}>{i18n.t('note')}</Text>
       <Text style={{...styles.val, width: '80%', marginBottom: 10}}>
         {note}
       </Text>
 
       {
-          console.log(props.item)
-      }
-
-      {
-        // TODO: ADD "DELIVERY ACCEPTED" BUTTON
         delivery 
         && props.item.sent 
         && !props.item.delivered 
@@ -336,7 +333,7 @@ const ContractorCard = props => {
                 backgroundColor={"#fff"}
                 rightBorderNone={true}
                 width={"100%"}
-                label={"Отримано"}
+                label={i18n.t('received')}
                 containerRight={true} 
                 onPress={
                   // props.role
@@ -368,7 +365,7 @@ const ContractorCard = props => {
             onBackdropPress={closeOverlay}
         >
           <Text style={styles.text}>
-            Ви впевнені, що хочете пiдтвердити отримання товару?
+            {i18n.t('confirm_arrive_product')}
           </Text>
           <View style={styles.buttonsContainer}>
             <View>

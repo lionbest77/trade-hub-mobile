@@ -19,6 +19,8 @@ import CheckMarkIcon from "../../ui/icons/CheckMarkIcon";
 import InformText from "../../ui/InformText/InformText";
 import CrossIcon from "../../ui/icons/CrossIcon";
 
+import i18n from '../../services/localization'
+
 const NotificationScreen = (props) => {
 
   // console.log("-------Notification Props----------", props);
@@ -154,7 +156,7 @@ const NotificationScreen = (props) => {
       fetchAllNotifications()
     } catch (e) {
       Alert.alert("Notif", `${e.response.data}`, [
-        { text: "OK" }
+        { text: i18n.t('ok') }
       ]);
     }}, []);
 
@@ -175,7 +177,7 @@ const NotificationScreen = (props) => {
         overlayStyle={styles.overlayContainer}
         onBackdropPress={closeOverlay}
       >
-        <Text style={styles.text}>Ви дійсно хочите видалити повідомлення?</Text>
+        <Text style={styles.text}>{i18n.t('want_remove_notification')}</Text>
         <View style={styles.buttonsContainer}>
           <View>
             <MainButton
@@ -217,7 +219,7 @@ const NotificationScreen = (props) => {
         <View style={styles.emptyTendersContainer}>
         <View style={styles.tendersContainer}>
         <Image source={require("../../assets/images/AddTenders.png")} />
-        <InformText>Повідомлення відсутні</InformText>
+        <InformText>{i18n.t('notifications_empty')}</InformText>
         </View>
         </View>
         ) : (

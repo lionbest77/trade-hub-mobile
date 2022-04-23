@@ -26,6 +26,8 @@ import { DEFAULT_URL } from "../../constants/Req";
 import COLORS from '../../constants/Colors';
 import styles from "./style";
 
+import i18n from '../../services/localization'
+
 const AuthCode = props => {
 
   // console.log(props);
@@ -106,7 +108,7 @@ const AuthCode = props => {
       .toString()
       .replace(/,/g, "");
     if (arr.length < 5) {
-      setWarning("Код повинен складатися з 5 цифр.");
+      setWarning(i18n.t('code_5_digit_long'));
     }
     setWarning(" ");
     setCode(arr);
@@ -158,9 +160,7 @@ const AuthCode = props => {
           }));
         }
         if (res.data.success === false) {
-          setWarning(
-              "Введений Вами код не співпадає з кодом, відправленим на Email"
-          );
+          setWarning(i18n.t('code_doesnot_match_from_email'));
           setCode("");
         } else if (googleReg === true) {
           setActiveOverlay(true);
@@ -188,14 +188,13 @@ const AuthCode = props => {
           onBackdropPress={() => {setIsLoading(false); props.navigation.navigate("Login");}}
       >
         <Text style={styles.text}>
-          Дякуємо, Ви зареєструвалися. Ми повідомимо Вас по email, коли заявка
-          буде оброблена.
+          {i18n.t('thx_for_register')}
         </Text>
         <View style={styles.buttonsContainer}>
           <View>
             <MainButton
                 width={100}
-                label={"Добре"}
+                label={i18n.t('ok')}
                 onPress={() => {setIsLoading(false); props.navigation.navigate("Login");}}
             />
           </View>
@@ -204,7 +203,7 @@ const AuthCode = props => {
       <KeyboardAvoidingView keyboardVerticalOffset={50} style={{ flex: 1 }} behavior={Platform.OS === 'ios' ? 'padding' : null} enabled>
         <View style={styles.mainContainer}>
           <View styles={styles.informText}>
-            <InformText>Вам було надiслано код на пошту</InformText>
+            <InformText>{i18n.t('send_code_to_email')}</InformText>
           </View>
           <View style={styles.codeInputContainer}>
             <TextInput
@@ -303,7 +302,7 @@ const AuthCode = props => {
                     </View>
                 ) : (
                     <MainButton
-                        label={"Підтвердити"}
+                        label={i18n.t('confirm')}
                         width={"100%"}
                         onPress={() => code && sendCode(code)}
                         disabled={!code}

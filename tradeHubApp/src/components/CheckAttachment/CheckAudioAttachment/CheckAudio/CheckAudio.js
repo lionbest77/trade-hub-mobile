@@ -12,6 +12,8 @@ import BasketIcon from "../../../../ui/icons/BasketIcon";
 import MainButton from "../../../buttons/MainButton/MainButton";
 import { AudioSlider } from "../AudioSlider/AudioSlider";
 
+import i18n from '../../../../services/localization'
+
 const CheckAudio = ({
                       value,
                       sound,
@@ -25,9 +27,9 @@ const CheckAudio = ({
                       audioDuration
 }) => {
   const handlerDeleteAudio = () => {
-    Alert.alert("Аудіозапис буде видалено", "Видалити файл?", [
-      { text: "Так", onPress: () => handleDelete() },
-      { text: "Ні", onPress: () => {} }
+    Alert.alert(i18n.t('audio_will_deleted'), i18n.t('delete_file'), [
+      { text: i18n.t('yes'), onPress: () => handleDelete() },
+      { text: i18n.t('no'), onPress: () => {} }
     ]);
   };
 
@@ -50,7 +52,7 @@ const CheckAudio = ({
       }).start();
     }catch (e) {
       Alert.alert("Check Audio", `${e.response.data}`, [
-        { text: "OK" }
+        { text: i18n.t('ok') }
       ]);
     }
   }, [checkStatus]);
